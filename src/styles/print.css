@@ -1,0 +1,136 @@
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm 12mm;
+  }
+
+  :root {
+    color-scheme: light;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #0b1220 !important;
+    font-size: 10.5pt;
+    line-height: 1.4;
+  }
+
+  .parallax-grid,
+  .parallax-aurora,
+  .console-topbar,
+  .console-nav,
+  .metrics-strip,
+  .waterfall-panel,
+  .trace-panel,
+  .log-panel,
+  .code-card,
+  .code-actions,
+  .diagram-card-header p,
+  .topbar-title {
+    display: none !important;
+  }
+
+  .console-shell,
+  .page-shell,
+  .console-main {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    display: block !important;
+  }
+
+  .resume-content {
+    display: block !important;
+  }
+
+  .hero,
+  .markdown-panel,
+  .diagram-card {
+    background: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    box-shadow: none !important;
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+    margin-bottom: 0.35cm;
+  }
+
+  .hero {
+    border: 0 !important;
+    border-bottom: 2px solid #111827 !important;
+    border-radius: 0 !important;
+    padding: 0 0 0.4cm !important;
+    margin-bottom: 0.4cm;
+  }
+
+  .hero::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  .hero h1 {
+    font-size: 20pt;
+    color: #111827 !important;
+  }
+
+  .hero p,
+  .hero small,
+  .prose-dashboard h1,
+  .prose-dashboard h2,
+  .prose-dashboard h3,
+  .markdown-panel p,
+  .markdown-panel li,
+  .diagram-card-header h3 {
+    color: #111827 !important;
+  }
+
+  .prose-dashboard h1,
+  .prose-dashboard h2,
+  .prose-dashboard h3 {
+    border-color: #e5e7eb !important;
+    page-break-after: avoid;
+    break-after: avoid-page;
+  }
+
+  .prose-dashboard li::before {
+    background: #4b5563 !important;
+    box-shadow: none !important;
+  }
+
+  .prose-dashboard ol {
+    padding-left: 1.2rem !important;
+  }
+
+  .prose-dashboard code:not(pre code) {
+    color: #111827 !important;
+    background: #f3f4f6 !important;
+    border-color: #d1d5db !important;
+  }
+
+  .prose-dashboard a {
+    color: #111827 !important;
+    overflow-wrap: anywhere;
+  }
+
+  a {
+    color: #111827 !important;
+    text-decoration: underline !important;
+    text-decoration-color: #6b7280 !important;
+  }
+
+  .diagram-canvas {
+    min-height: auto !important;
+    padding: 0.12cm !important;
+  }
+
+  .diagram-canvas svg {
+    max-height: 7.2cm;
+    background: #ffffff !important;
+    border-color: #d1d5db !important;
+  }
+
+  .diagram-card,
+  .markdown-panel {
+    margin-bottom: 0.26cm !important;
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "name": "cv",
+  "version": "1.0.0",
+  "description": "Observability-themed interactive resume built with Astro",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jordan-simonovski/cv.git"
+  },
+  "keywords": [],
+  "author": "Jordan Simonovski",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jordan-simonovski/cv/issues"
+  },
+  "homepage": "https://github.com/jordan-simonovski/cv#readme",
+  "dependencies": {
+    "@astrojs/react": "^5.0.0",
+    "@fortawesome/fontawesome-svg-core": "^7.2.0",
+    "@fortawesome/free-brands-svg-icons": "^7.2.0",
+    "@fortawesome/free-solid-svg-icons": "^7.2.0",
+    "@fortawesome/react-fontawesome": "^3.2.0",
+    "astro": "^6.0.4",
+    "d3": "^7.9.0",
+    "marked": "^17.0.4",
+    "mermaid": "^11.13.0",
+    "pdf-lib": "^1.17.1",
+    "prismjs": "^1.30.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.7",
+    "@types/node": "^25.5.0",
+    "@types/prismjs": "^1.26.6",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.0"
+  }
+}

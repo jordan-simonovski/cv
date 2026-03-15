@@ -1,0 +1,11 @@
+[
+  { "label": "Summary", "href": "#summary" },
+  { "label": "Skills", "href": "#skills" },
+  { "label": "Experience", "href": "#experience" },
+  { "label": "Leadership & Scope", "href": "#leadership-scope" },
+  { "label": "Selected Impact", "href": "#selected-impact" },
+  { "label": "Side Quests", "href": "#projects" },
+  { "label": "Contact", "href": "#contact" },
+  { "label": "GitHub", "href": "https://github.com/jordan-simonovski" },
+  { "label": "LinkedIn", "href": "https://www.linkedin.com/in/jsimonovski" }
+]

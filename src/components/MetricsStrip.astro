@@ -1,0 +1,45 @@
+---
+type ExperienceSpan = {
+  id: string;
+  service: string;
+  role: string;
+  start: string;
+  end: string;
+  status: "ok" | "warn" | "critical";
+};
+
+const { role, location, spans, updatedAt } = Astro.props as {
+  role: string;
+  location: string;
+  spans: ExperienceSpan[];
+  updatedAt: string;
+};
+
+const activeYears = spans.length;
+const criticalCount = spans.filter((span) => span.status === "critical").length;
+const burnRate = criticalCount > 0 ? "1.3x" : "0.7x";
+const latestDeploy = `updated ${updatedAt}`;
+---
+
+<section class="metrics-strip" aria-label="Key metrics">
+  <article class="metric-card metric-ok">
+    <p class="metric-label">Current Role</p>
+    <strong>{role}</strong>
+    <span>{location}</span>
+  </article>
+  <article class="metric-card metric-otel">
+    <p class="metric-label">Domain Focus</p>
+    <strong>99.98%</strong>
+    <span>OpenTelemetry traces + logs + metrics</span>
+  </article>
+  <article class="metric-card metric-warn">
+    <p class="metric-label">Delivery Profile</p>
+    <strong>{burnRate}</strong>
+    <span>{criticalCount === 0 ? "Healthy signal profile" : "Recent incident hot spots"}</span>
+  </article>
+  <article class="metric-card metric-k8s">
+    <p class="metric-label">Experience Timeline</p>
+    <strong>{activeYears} spans</strong>
+    <span>{latestDeploy}</span>
+  </article>
+</section>

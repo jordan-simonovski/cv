@@ -1,0 +1,32 @@
+---
+import AppIcon from "./AppIcon";
+
+const { title, spans, sectionId = "projects" } = Astro.props as {
+  title: string;
+  spans: string[];
+  sectionId?: string;
+};
+---
+
+<section id={sectionId} class="trace-panel" aria-label={title}>
+  <header class="panel-header">
+    <h2>
+      <AppIcon name="timeline" className="panel-icon" />
+      {title}
+    </h2>
+    <p>{spans.length} project highlights</p>
+  </header>
+  <div class="trace-list">
+    {
+      spans.map((span, index) => (
+        <article class="trace-span-card">
+          <span class="trace-span-id">
+            <AppIcon name="timeline" className="inline-icon" />
+            span-{index + 1}
+          </span>
+          <p set:html={span} />
+        </article>
+      ))
+    }
+  </div>
+</section>

@@ -1,0 +1,156 @@
+---
+import "../styles/theme.css";
+import "../styles/print.css";
+import AppIcon from "../components/AppIcon";
+import { getAvailabilityViewModel } from "../lib/availability";
+import profileImage from "../assets/jordan.webp";
+
+const {
+  title,
+  role,
+  location,
+  email,
+  website,
+  github,
+  linkedin,
+  openToWork,
+  availability,
+  timezone,
+  workMode,
+  responseSla,
+  updatedAt
+} =
+  Astro.props as {
+    title: string;
+    role: string;
+    location: string;
+    email: string;
+    website: string;
+    github: string;
+    linkedin: string;
+    openToWork: boolean;
+    availability: string;
+    timezone: string;
+    workMode: string;
+    responseSla: string;
+    updatedAt: string;
+  };
+
+const availabilityState = getAvailabilityViewModel(openToWork);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content={`${title} - ${role}`} />
+    <title>{title} | Observability Resume</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <div class="parallax-grid" aria-hidden="true"></div>
+    <div class="parallax-aurora" aria-hidden="true"></div>
+    <div class="telemetry-bg" aria-hidden="true">
+      <div class="telemetry-traces"></div>
+      <div class="telemetry-sparklines"></div>
+      <div class="telemetry-vignette"></div>
+    </div>
+    <main class="console-shell">
+      <header class="console-topbar" aria-label="Profile status">
+        <p class="topbar-title">career_profile</p>
+        <ul>
+          <li>
+            <AppIcon name={availabilityState.icon} className="inline-icon" />
+            {availabilityState.badgeLabel}
+          </li>
+          <li>
+            <AppIcon name="timeline" className="inline-icon" />
+            Platform, reliability, observability
+          </li>
+          <li>
+            <AppIcon name="updatedAt" className="inline-icon" />
+            Updated {updatedAt}
+          </li>
+        </ul>
+      </header>
+      <div class="page-shell">
+        <aside class="console-nav">
+          <slot name="nav" />
+        </aside>
+        <section id="main-content" class="console-main">
+          <header class="hero">
+            <div class="hero-head">
+              <div class="hero-identity">
+                <p class="hero-tag">Staff-level platform and observability engineer</p>
+                <h1>{title}</h1>
+                <p class={`hero-availability-badge ${openToWork ? "is-open" : "is-closed"}`} aria-label={availabilityState.srLabel}>
+                  <AppIcon name={availabilityState.icon} className="inline-icon" />
+                  {availabilityState.badgeLabel}
+                </p>
+                <p class="hero-role">
+                  <AppIcon name="role" className="inline-icon" />
+                  {role}
+                </p>
+                <p class="hero-location">
+                  <AppIcon name="location" className="inline-icon" />
+                  {location}
+                </p>
+              </div>
+              <img
+                class="hero-avatar"
+                src={profileImage.src}
+                width="112"
+                height="112"
+                alt={`${title} profile photo`}
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+            <ul class="hero-meta" aria-label="Recruiter quick facts">
+              <li>
+                <AppIcon name={availabilityState.icon} className="inline-icon" />
+                {availability}
+              </li>
+              <li>
+                <AppIcon name="timezone" className="inline-icon" />
+                {timezone}
+              </li>
+              <li>
+                <AppIcon name="workMode" className="inline-icon" />
+                {workMode}
+              </li>
+              <li>
+                <AppIcon name="responseSla" className="inline-icon" />
+                {responseSla}
+              </li>
+            </ul>
+            <div class="hero-actions" aria-label="Quick actions">
+              <a href={`mailto:${email}`}>
+                <AppIcon name="email" className="inline-icon" />
+                Email
+              </a>
+              <a href={linkedin} target="_blank" rel="noopener noreferrer">
+                <AppIcon name="linkedin" className="inline-icon" />
+                LinkedIn
+              </a>
+              <a href={github} target="_blank" rel="noopener noreferrer">
+                <AppIcon name="github" className="inline-icon" />
+                GitHub
+              </a>
+              <a href={website} target="_blank" rel="noopener noreferrer">
+                <AppIcon name="website" className="inline-icon" />
+                Website
+              </a>
+              <a href="/resume.pdf" download="Jordan-Simonovski-Resume.pdf">
+                <AppIcon name="download" className="inline-icon" />
+                Download PDF
+              </a>
+            </div>
+          </header>
+          <slot />
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

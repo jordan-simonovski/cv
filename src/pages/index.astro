@@ -1,0 +1,36 @@
+---
+import { getCollection } from "astro:content";
+
+import MarkdownResume from "../components/MarkdownResume.astro";
+import NavBar from "../components/NavBar";
+import ResumeLayout from "../layouts/ResumeLayout.astro";
+import navigationData from "../config/navigation.json";
+import { validateNavigation } from "../lib/navigation";
+
+const cvCollection = await getCollection("cv");
+const cv = cvCollection[0];
+if (!cv) {
+  throw new Error("Missing CV markdown entry.");
+}
+
+const navigation = validateNavigation(navigationData);
+---
+
+<ResumeLayout
+  title={cv.data.title}
+  role={cv.data.role}
+  location={cv.data.location}
+  email={cv.data.email}
+  website={cv.data.website}
+  github={cv.data.github}
+  linkedin={cv.data.linkedin}
+  openToWork={cv.data.openToWork}
+  availability={cv.data.availability}
+  timezone={cv.data.timezone}
+  workMode={cv.data.workMode}
+  responseSla={cv.data.responseSla}
+  updatedAt={cv.data.updatedAt}
+>
+  <NavBar slot="nav" items={navigation} client:load />
+  <MarkdownResume markdown={cv.body} cvData={cv.data} />
+</ResumeLayout>

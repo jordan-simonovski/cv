@@ -1,0 +1,89 @@
+---
+import type { CollectionEntry } from "astro:content";
+import MetricsStrip from "./MetricsStrip.astro";
+import LogStreamPanel from "./LogStreamPanel.astro";
+import TraceTimelinePanel from "./TraceTimelinePanel.astro";
+import InteractiveCodeBlock from "./InteractiveCodeBlock";
+import MermaidD3Diagram from "./MermaidD3Diagram";
+import ExperienceTraceWaterfall from "./ExperienceTraceWaterfall";
+import { buildContactEntries } from "../lib/contactEntries";
+import { buildProjectEntries } from "../lib/projectEntries";
+import { extractBlocks, renderInlineMarkdown } from "../lib/markdown";
+
+const { markdown, cvData } = Astro.props as {
+  markdown: string;
+  cvData: CollectionEntry<"cv">["data"];
+};
+const blocks = extractBlocks(markdown);
+
+function extractListItems(raw: string): string[] {
+  return raw
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("- "))
+    .map((line) => line.replace(/^- /, "").trim());
+}
+
+const markdownProjectEntries = blocks
+  .filter((block) => block.type === "markdown" && block.sectionId === "projects")
+  .flatMap((block) => extractListItems(block.type === "markdown" ? block.raw : ""));
+const projectItems = buildProjectEntries(markdownProjectEntries);
+const markdownContactEntries = blocks
+  .filter((block) => block.type === "markdown" && block.sectionId === "contact")
+  .flatMap((block) => extractListItems(block.type === "markdown" ? block.raw : ""));
+const contactItems = buildContactEntries(markdownContactEntries, {
+  email: cvData.email,
+  website: cvData.website,
+  github: cvData.github,
+  linkedin: cvData.linkedin,
+  location: cvData.location
+})
+  .map((entry) => renderInlineMarkdown(entry));
+
+const filteredBlocks = blocks.filter((block) => {
+  if (block.sectionId === "contact" || block.sectionId === "projects") {
+    return block.type !== "markdown";
+  }
+  return true;
+});
+---
+
+<section class="resume-content">
+  <MetricsStrip role={cvData.role} location={cvData.location} spans={cvData.experienceSpans} updatedAt={cvData.updatedAt} />
+  {
+    cvData.experienceSpans.length > 0 ? (
+      <ExperienceTraceWaterfall spans={cvData.experienceSpans} client:load />
+    ) : null
+  }
+  {
+    projectItems.length > 0 ? (
+      <TraceTimelinePanel sectionId="projects" title="Side Quests" spans={projectItems} />
+    ) : null
+  }
+  <LogStreamPanel sectionId="contact" title="Contact" entries={contactItems} />
+  {
+    filteredBlocks.map((block, index) => {
+      if (block.type === "markdown") {
+        return <article class="markdown-panel prose-dashboard" set:html={block.html} />;
+      }
+
+      if (block.type === "diagram") {
+        return (
+          <MermaidD3Diagram
+            chart={block.code}
+            title={`Architecture Diagram ${index + 1}`}
+            client:visible
+          />
+        );
+      }
+
+      return (
+        <InteractiveCodeBlock
+          language={block.language}
+          code={block.code}
+          client:visible
+        />
+      );
+    })
+  }
+</section>

@@ -1,0 +1,47 @@
+---
+import AppIcon from "./AppIcon";
+
+const { title, entries, sectionId = "contact" } = Astro.props as {
+  title: string;
+  entries: string[];
+  sectionId?: string;
+};
+
+function getEntryIcon(entry: string): "email" | "github" | "linkedin" | "contact" {
+  const lower = entry.toLowerCase();
+  if (lower.includes("email")) {
+    return "email";
+  }
+  if (lower.includes("github")) {
+    return "github";
+  }
+  if (lower.includes("linkedin")) {
+    return "linkedin";
+  }
+  return "contact";
+}
+---
+
+<section id={sectionId} class="log-panel" aria-label={title}>
+  <header class="panel-header">
+    <h2>
+      <AppIcon name="contact" className="panel-icon" />
+      {title}
+    </h2>
+    <p>Preferred contact channels</p>
+  </header>
+  <ul class="log-stream">
+    {
+      entries.map((entry, index) => (
+        <li class="log-row" data-level={index === 0 ? "ok" : "info"}>
+          <span class="log-ts">23:{String(10 + index).padStart(2, "0")}:12</span>
+          <span class="log-level">{index === 0 ? "OK" : "INFO"}</span>
+          <span class="log-message">
+            <AppIcon name={getEntryIcon(entry)} className="inline-icon" />
+            <span set:html={entry} />
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+</section>
