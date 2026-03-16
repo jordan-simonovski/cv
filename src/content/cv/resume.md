@@ -323,7 +323,6 @@ Staff engineer owning global-scale observability infrastructure across Mimir, Te
 
 ## K8s Cost and Reliability Control Plane
 
-
 - Added progressive delivery and rollback automation based on error budget burn rates, reducing failed rollout blast radius.
 
 ## Incident Triage Copilot for Observability Workflows

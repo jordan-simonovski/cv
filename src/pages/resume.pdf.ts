@@ -164,6 +164,17 @@ export async function GET(): Promise<Response> {
       sidebarY -= LINE_HEIGHT;
     };
 
+    const drawSidebarSubheading = (label: string): void => {
+      page.drawText(label, {
+        x: sidebarX + SIDEBAR_INNER_PADDING,
+        y: sidebarY,
+        size: BODY_SIZE,
+        font: titleFont,
+        color: COLORS.muted
+      });
+      sidebarY -= LINE_HEIGHT;
+    };
+
     if (profileImage) {
       const maxImageWidth = sidebarWidth - SIDEBAR_INNER_PADDING * 2;
       const imageScale = maxImageWidth / profileImage.width;
@@ -216,11 +227,26 @@ export async function GET(): Promise<Response> {
     const sidebarSkills = model.skills
       .map((item) => item.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").trim())
       .filter((item) => item.length > 0)
-      .slice(0, 8);
+      .slice(0, 6);
+    drawSidebarItems(sidebarSkills);
+
     const sidebarSideQuests = model.sideQuests
-      .map((item) => `Side quest: ${item}`)
+      .map((item) => item.trim())
+      .filter((item) => item.length > 0)
       .slice(0, 3);
-    drawSidebarItems([...sidebarSkills, ...sidebarSideQuests]);
+    if (sidebarSideQuests.length > 0) {
+      drawSidebarSubheading("SIDE QUESTS");
+      drawSidebarItems(sidebarSideQuests);
+    }
+
+    const sidebarExtracurriculars = model.extracurriculars
+      .map((item) => item.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").trim())
+      .filter((item) => item.length > 0)
+      .slice(0, 3);
+    if (sidebarExtracurriculars.length > 0) {
+      drawSidebarSubheading("EXTRACURRICULARS");
+      drawSidebarItems(sidebarExtracurriculars);
+    }
   };
 
   const createContinuationPage = (): number => {
