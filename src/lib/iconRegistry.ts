@@ -27,6 +27,8 @@ const iconRegistry = {
   summary: faHouseSignal,
   skills: faScrewdriverWrench,
   experience: faWaveSquare,
+  leadershipScope: faUserCheck,
+  selectedImpact: faCheckCircle,
   projects: faDiagramProject,
   contact: faEnvelope,
   github: faGithub,

@@ -29,6 +29,12 @@ function getNavIcon(item: NavItem): IconName {
     if (section === "experience") {
       return "experience";
     }
+    if (section === "leadership-scope") {
+      return "leadershipScope";
+    }
+    if (section === "selected-impact") {
+      return "selectedImpact";
+    }
     if (section === "projects") {
       return "projects";
     }

@@ -203,8 +203,8 @@ Staff engineer owning global-scale observability infrastructure across Mimir, Te
 - AWS (10+ years, full platform scale up, compute, serverless)
 - Docker platforms (Kubernetes, EKS, GKE)
 - OpenTelemetry ecosystem (Weaver, Collector, SDK)
-- Metrics pipelines (Prometheus, Mimir)
 - Observability (Prometheus/Mimir, Grafana, Tempo/ClickHouse)
+- Site Reliability Engineering (SLOs, War games, chaos testing/tooling)
 - IaC with Terraform/Crossplane and CI/CD with GitHub Actions/Bitbucket Pipelines
 - Golang, Typescript, and Rust development
 - Platform engineering i.e. building, validating and running internal products.
@@ -220,13 +220,14 @@ Staff engineer owning global-scale observability infrastructure across Mimir, Te
 <details>
   <summary>Expand full impact</summary>
 
-- Evangelised the shift to wide events and implemented ClickHouse observability pipelines at `100TB/day`+ ingestion.
+- Evangelised the shift to wide events and implemented ClickHouse observability infra at `100TB/day`+ ingestion.
 - Built and operated Grafana Tempo tracing infrastructure at `180TB/day` ingestion.
 - Consistent and continual improvements in CI with reviewdog + Bitbucket pipes to ease developer workflows and feedback.
 - Consistent and continual improvements in CD with ArgoCD/Spinnaker work, focusing on ephemeral build environments.
 - Raised the bar on SLOs both within the observability department and other teams by introducing better practices, and running sessions with teams on good SLOs.
 - Introduced Grafana Scenes internally and shipped a centralised debugging workflow across core Atlassian experiences.
 - Was considered an SME for Mimir/Tempo: scaled Grafana Mimir and ran usage-accurate load validation for ~200k alert evaluations.
+- Introduced span metrics and TraceQL Metrics (metrics derived from traces) to address gaps in traditional monitoring setups.
 - Standardised Kubernetes deployments with reusable Helm charts built using internal OSS tooling.
 - Integrated an AI-assisted query experience across PromQL, TraceQL, SQL (ClickHouse), and SPL (Splunk).
 - Designed and implemented Atlassian's first covered-experience service map for faster incident triage.
@@ -235,6 +236,9 @@ Staff engineer owning global-scale observability infrastructure across Mimir, Te
 - Designed multi-region failover foundations for Grafana and Mimir with low RTO/RPO and controlled cost.
 - Implemented serverless Splunk scaling automation using Lambda Step Functions.
 - Modernised Splunk infrastructure, with a focus on cloud-native platform management. Scaled to 600TB/day ingestion.
+- Implemented K6 for load testing infrastructure at scale, hitting 6M metric samples per second.
+- Led work for, designed, and implemented internal PaaS abstractions for alert management.
+
 
 </details>
 

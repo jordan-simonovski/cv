@@ -1,5 +1,6 @@
 import { getCollection } from "astro:content";
 import { readFile } from "node:fs/promises";
+import path from "node:path";
 import {
   PDFDocument,
   StandardFonts,
@@ -80,8 +81,10 @@ export async function GET(): Promise<Response> {
   const titleFont = await pdf.embedFont(StandardFonts.HelveticaBold);
   const bodyFont = await pdf.embedFont(StandardFonts.Helvetica);
   const tryEmbedImage = async (relativePath: string): Promise<PDFImage | undefined> => {
+    const assetName = relativePath.split("/").pop() ?? relativePath;
+    const diskPath = path.join(process.cwd(), "src", "assets", assetName);
     try {
-      const bytes = await readFile(new URL(relativePath, import.meta.url));
+      const bytes = await readFile(diskPath);
       if (/\.(jpe?g)$/i.test(relativePath)) {
         return await pdf.embedJpg(bytes);
       }
@@ -155,11 +158,11 @@ export async function GET(): Promise<Response> {
       color: rgb(0.12, 0.13, 0.17)
     });
     if (sidebarSplashImage) {
-      const splashScale = Math.max(sidebarWidth / sidebarSplashImage.width, PAGE_HEIGHT / sidebarSplashImage.height);
-      const splashWidth = sidebarSplashImage.width * splashScale;
+      const splashWidth = sidebarWidth;
+      const splashScale = splashWidth / sidebarSplashImage.width;
       const splashHeight = sidebarSplashImage.height * splashScale;
       page.drawImage(sidebarSplashImage, {
-        x: sidebarX + (sidebarWidth - splashWidth) / 2,
+        x: sidebarX,
         y: (PAGE_HEIGHT - splashHeight) / 2,
         width: splashWidth,
         height: splashHeight
@@ -270,28 +273,38 @@ export async function GET(): Promise<Response> {
     };
     drawCircularProfile();
 
-    page.drawText(model.name.toUpperCase(), {
-      x: sidebarX + SIDEBAR_INNER_PADDING,
-      y: PAGE_HEIGHT - 194,
-      size: TITLE_SIZE - 2,
-      font: titleFont,
-      color: COLORS.sidebarText
-    });
+    const nameLines = wrapText(
+      model.name.toUpperCase(),
+      sidebarWidth - SIDEBAR_INNER_PADDING * 2,
+      TITLE_SIZE - 2,
+      titleFont
+    );
+    let nameY = PAGE_HEIGHT - 194;
+    for (const line of nameLines) {
+      page.drawText(line, {
+        x: sidebarX + SIDEBAR_INNER_PADDING,
+        y: nameY,
+        size: TITLE_SIZE - 2,
+        font: titleFont,
+        color: COLORS.sidebarText
+      });
+      nameY -= 23;
+    }
     page.drawText(model.role, {
       x: sidebarX + SIDEBAR_INNER_PADDING,
-      y: PAGE_HEIGHT - 216,
+      y: nameY - 6,
       size: ROLE_SIZE,
       font: bodyFont,
       color: COLORS.sidebarMuted
     });
     page.drawText(model.location, {
       x: sidebarX + SIDEBAR_INNER_PADDING,
-      y: PAGE_HEIGHT - 232,
+      y: nameY - 22,
       size: BODY_SIZE,
       font: bodyFont,
       color: COLORS.sidebarMuted
     });
-    sidebarY = PAGE_HEIGHT - 266;
+    sidebarY = nameY - 56;
 
     const drawSidebarItems = (items: string[]): void => {
       for (const item of items) {
