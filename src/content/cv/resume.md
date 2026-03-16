@@ -46,24 +46,24 @@ experienceSpans:
       - "Golang"
       - "Typescript"
     children:
-      - id: "otel-rollout"
-        name: "OpenTelemetry rollout"
+      - id: "wide-events-clickhouse"
+        name: "Wide events + ClickHouse scale-up"
         status: "ok"
         startOffset: 8
         endOffset: 42
-        detail: "Implemented collector pipelines, semantic conventions, and trace-to-log correlation."
-      - id: "slo-alert-refactor"
-        name: "SLO alert refactor"
-        status: "warn"
+        detail: "Led the shift to wide events and scaled ClickHouse ingestion to 100TB/day while maintaining fast query performance for operators."
+      - id: "tempo-tracing-platform"
+        name: "Tempo tracing platform ownership"
+        status: "ok"
         startOffset: 45
         endOffset: 78
-        detail: "Replaced threshold-based pages with burn-rate alerting and reduced alert fatigue."
-      - id: "cluster-migration"
-        name: "Cluster migration waves"
+        detail: "Built and ran observability tracing infrastructure on Grafana Tempo, scaling ingestion to 180TB/day with reliability guardrails."
+      - id: "scenes-debugging-ux"
+        name: "Grafana Scenes debugging UX"
         status: "ok"
         startOffset: 78
         endOffset: 100
-        detail: "Coordinated production migration waves with progressive delivery guardrails."
+        detail: "Introduced and implemented Grafana Scenes as a centralized debugging surface across data sources, improving explorability and reducing MTTR."
   - id: "lendi-cloud-engineering-lead"
     service: "Lendi"
     role: "Cloud Engineering Lead"
