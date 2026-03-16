@@ -22,7 +22,6 @@
   .console-nav,
   .metrics-strip,
   .waterfall-panel,
-  .trace-panel,
   .log-panel,
   .code-card,
   .code-actions,
@@ -41,11 +40,53 @@
   }
 
   .resume-content {
-    display: block !important;
+    display: flex !important;
+    flex-direction: column;
+  }
+
+  .resume-content > .markdown-panel {
+    order: 30;
+  }
+
+  .resume-content > .markdown-panel:has(h1#summary) {
+    order: 10;
+  }
+
+  .resume-content > .markdown-panel:has(h1#recruiter-snapshot) {
+    order: 15;
+  }
+
+  .resume-content > .markdown-panel:has(h1#skills) {
+    order: 20;
+  }
+
+  .resume-content > .markdown-panel:has(h1#experience) {
+    order: 40;
+  }
+
+  .resume-content > #projects.trace-panel {
+    order: 41;
+  }
+
+  .resume-content > .markdown-panel:has(h1#leadership-scope) {
+    order: 50;
+  }
+
+  .resume-content > .markdown-panel:has(h1#selected-impact) {
+    order: 55;
+  }
+
+  .resume-content > .markdown-panel:has(h1#contact) {
+    order: 90;
+  }
+
+  .resume-content > .markdown-panel:has(h1#references) {
+    order: 95;
   }
 
   .hero,
   .markdown-panel,
+  .trace-panel,
   .diagram-card {
     background: #ffffff !important;
     border: 1px solid #d1d5db !important;
@@ -92,6 +133,17 @@
     break-after: avoid-page;
   }
 
+  /* Give PDF headings clearer breathing room before body text. */
+  .prose-dashboard h1 {
+    margin: 0.14cm 0 0.24cm !important;
+    padding-bottom: 0.12cm !important;
+  }
+
+  .prose-dashboard h2,
+  .prose-dashboard h3 {
+    margin: 0.12cm 0 0.2cm !important;
+  }
+
   .prose-dashboard li::before {
     background: #4b5563 !important;
     box-shadow: none !important;
@@ -130,7 +182,49 @@
   }
 
   .diagram-card,
-  .markdown-panel {
+  .markdown-panel,
+  .trace-panel {
     margin-bottom: 0.26cm !important;
+  }
+
+  .trace-panel .panel-header {
+    border-bottom: 0 !important;
+    padding: 0 !important;
+  }
+
+  .trace-panel .panel-header h2 {
+    margin: 0.14cm 0 0.24cm !important;
+    padding-bottom: 0.12cm !important;
+    width: 100%;
+    border-bottom: 1px solid #e5e7eb !important;
+    color: #111827 !important;
+    font-size: 14pt;
+  }
+
+  .trace-panel .panel-header p,
+  .trace-panel .panel-header .panel-icon,
+  .trace-panel .trace-span-id,
+  .trace-panel .inline-icon {
+    display: none !important;
+  }
+
+  .trace-list {
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  .trace-span-card {
+    border: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 0 0.08cm !important;
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+
+  .trace-span-card p {
+    margin: 0 !important;
+    color: #111827 !important;
+    line-height: 1.4;
   }
 }

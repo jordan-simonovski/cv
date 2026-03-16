@@ -296,21 +296,6 @@ Staff engineer owning global-scale observability infrastructure across Mimir, Te
 </details>
 
 
-# Leadership & Scope {#leadership-scope}
-
-- Drove the shift to new observability practices and tooling when implementing Grafana Scenes as a replacement for traditional dashboards, ClickHouse for modern observability based on the wide-event model, and AI observability kick-offs internally.
-- Owned observability architecture and operations for critical Atlassian workflows, including platforms running at `100TB/day`+ (ClickHouse) and `180TB/day` (Tempo).
-- Designed and shipped operator tooling used across teams, including internal Grafana Scenes workflows, AI-assisted query generation, and Atlassian's first service map by covered experience.
-- Drove reliability practice adoption across organisations by implementing SLO/error-budget patterns, burn-rate alerting, and incident/runbook automation.
-
-
-# Selected Impact {#selected-impact}
-
-- Scaled observability pipelines to `100TB/day`+ (ClickHouse) and `180TB/day` (Tempo) while preserving fast operator workflows.
-- Improved Tempo query performance by `30%+` with minimal cost impact.
-- Standardized Kubernetes delivery patterns with reusable Helm tooling and stronger deployment guardrails.
-
-
 # Side Quests {#projects}
 
 ## Incident Triage Copilot for Observability Workflows
@@ -344,14 +329,29 @@ Staff engineer owning global-scale observability infrastructure across Mimir, Te
 - SRECon22 Asia/Pacific organiser.
 - [Monitoring.Sydney](https://monitoring.sydney/) organiser.
 - DevOpsDays Sydney 2019 organiser.
-- Currently building out an [open source Grafana Scenes app]() on a ClickHouse data source to vastly improve developer experience when debugging applications
+- Currently building out an [open source Grafana Scenes app](https://github.com/jordan-simonovski/heatmap-panel) on a ClickHouse data source to vastly improve developer experience when debugging applications
+
+
+# Leadership & Scope {#leadership-scope}
+
+- Drove the shift to new observability practices and tooling when implementing Grafana Scenes as a replacement for traditional dashboards, ClickHouse for modern observability based on the wide-event model, and AI observability kick-offs internally.
+- Owned observability architecture and operations for critical Atlassian workflows, including platforms running at `100TB/day`+ (ClickHouse) and `180TB/day` (Tempo).
+- Designed and shipped operator tooling used across teams, including internal Grafana Scenes workflows, AI-assisted query generation, and Atlassian's first service map by covered experience.
+- Drove reliability practice adoption across organisations by implementing SLO/error-budget patterns, burn-rate alerting, and incident/runbook automation.
+
+
+# Selected Impact {#selected-impact}
+
+- Scaled observability pipelines to `100TB/day`+ (ClickHouse) and `180TB/day` (Tempo) while preserving fast operator workflows.
+- Improved Tempo query performance by `30%+` with minimal cost impact.
+- Standardized Kubernetes delivery patterns with reusable Helm tooling and stronger deployment guardrails.
 
 
 # Contact {#contact}
 
 - Phone: +61 451 309 913
 - Email: [jordan.simonovski@gmail.com](mailto:jordan.simonovski@gmail.com)
-- Website: [blog.jordansimonov.ski](https://blog.jordansimonov.ski)
+- Website: [jordansimonov.ski](https://jordansimonov.ski)
 - GitHub: [github.com/jordan-simonovski](https://github.com/jordan-simonovski)
 - LinkedIn: [linkedin.com/in/jsimonovski](https://www.linkedin.com/in/jsimonovski/)
 

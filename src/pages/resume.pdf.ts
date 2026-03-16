@@ -2,7 +2,10 @@ import { getCollection } from "astro:content";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import {
+  PDFArray,
   PDFDocument,
+  PDFName,
+  PDFString,
   StandardFonts,
   appendBezierCurve,
   clip,
@@ -31,12 +34,15 @@ const ROLE_SIZE = 10.5;
 const TITLE_SIZE = 27;
 const LINE_HEIGHT = 12;
 const SECTION_SPACING = 8;
+const HEADING_BODY_GAP = 4;
 const SIDEBAR_INNER_PADDING = 14;
 
 const COLORS = {
   text: rgb(0.1, 0.14, 0.2),
   muted: rgb(0.35, 0.4, 0.5),
   accent: rgb(0.05, 0.08, 0.14),
+  link: rgb(0.08, 0.32, 0.76),
+  linkSidebar: rgb(0.62, 0.82, 1),
   divider: rgb(0.78, 0.8, 0.85),
   sidebarOverlay: rgb(0.08, 0.1, 0.14),
   sidebarHeading: rgb(0.92, 0.94, 0.98),
@@ -45,7 +51,50 @@ const COLORS = {
 };
 
 function wrapText(text: string, maxWidth: number, fontSize: number, font: PDFFont): string[] {
-  const words = text.trim().split(/\s+/).filter(Boolean);
+  const splitLongWord = (word: string): string[] => {
+    if (!word) {
+      return [];
+    }
+
+    const chunks: string[] = [];
+    let current = "";
+
+    for (const char of word) {
+      const candidate = `${current}${char}`;
+      if (font.widthOfTextAtSize(candidate, fontSize) <= maxWidth) {
+        current = candidate;
+        continue;
+      }
+
+      if (current) {
+        chunks.push(current);
+      }
+
+      if (font.widthOfTextAtSize(char, fontSize) > maxWidth) {
+        chunks.push(char);
+        current = "";
+      } else {
+        current = char;
+      }
+    }
+
+    if (current) {
+      chunks.push(current);
+    }
+
+    return chunks;
+  };
+
+  const words = text
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .flatMap((word) => {
+      if (font.widthOfTextAtSize(word, fontSize) <= maxWidth) {
+        return [word];
+      }
+      return splitLongWord(word);
+    });
   if (words.length === 0) {
     return [];
   }
@@ -65,6 +114,43 @@ function wrapText(text: string, maxWidth: number, fontSize: number, font: PDFFon
 
   lines.push(current);
   return lines;
+}
+
+type ParsedMarkdownLink = {
+  start: number;
+  end: number;
+  url: string;
+};
+
+function parseMarkdownLinks(text: string): { text: string; links: ParsedMarkdownLink[] } {
+  const pattern = /\[([^\]]+)\]\(([^)]+)\)/g;
+  const links: ParsedMarkdownLink[] = [];
+  let rendered = "";
+  let sourceCursor = 0;
+  let renderedCursor = 0;
+  let match = pattern.exec(text);
+
+  while (match) {
+    const fullMatch = match[0];
+    const label = match[1] ?? "";
+    const url = (match[2] ?? "").trim();
+    const matchIndex = match.index;
+
+    rendered += text.slice(sourceCursor, matchIndex);
+    renderedCursor = rendered.length;
+    rendered += label;
+    links.push({
+      start: renderedCursor,
+      end: renderedCursor + label.length,
+      url
+    });
+
+    sourceCursor = matchIndex + fullMatch.length;
+    match = pattern.exec(text);
+  }
+
+  rendered += text.slice(sourceCursor);
+  return { text: rendered, links };
 }
 
 export async function GET(): Promise<Response> {
@@ -119,6 +205,133 @@ export async function GET(): Promise<Response> {
     }
   };
 
+  const normalizeLink = (url: string): string => {
+    if (/^(https?:\/\/|mailto:)/i.test(url)) {
+      return url;
+    }
+    return `https://${url}`;
+  };
+
+  const addLinkAnnotation = (
+    linkPage: typeof page,
+    url: string,
+    x: number,
+    yBottom: number,
+    width: number,
+    height: number
+  ): void => {
+    if (!url || width <= 0 || height <= 0) {
+      return;
+    }
+
+    const link = pdf.context.obj({
+      Type: "Annot",
+      Subtype: "Link",
+      Rect: [x, yBottom, x + width, yBottom + height],
+      Border: [0, 0, 0],
+      A: {
+        Type: "Action",
+        S: "URI",
+        URI: PDFString.of(normalizeLink(url))
+      }
+    });
+    const linkRef = pdf.context.register(link);
+    let annots = linkPage.node.lookupMaybe(PDFName.of("Annots"), PDFArray);
+    if (!annots) {
+      annots = pdf.context.obj([]) as PDFArray;
+      linkPage.node.set(PDFName.of("Annots"), annots);
+    }
+    annots.push(linkRef);
+  };
+
+  const drawLinkedLine = ({
+    line,
+    lineStart,
+    lineEnd,
+    links,
+    x,
+    y,
+    fontSize,
+    font,
+    baseColor,
+    linkColor
+  }: {
+    line: string;
+    lineStart: number;
+    lineEnd: number;
+    links: ParsedMarkdownLink[];
+    x: number;
+    y: number;
+    fontSize: number;
+    font: PDFFont;
+    baseColor: (typeof COLORS)["text"];
+    linkColor: (typeof COLORS)["link"];
+  }): void => {
+    const overlaps = links
+      .map((link) => {
+        const overlapStart = Math.max(lineStart, link.start);
+        const overlapEnd = Math.min(lineEnd, link.end);
+        if (overlapStart >= overlapEnd) {
+          return undefined;
+        }
+        return { ...link, overlapStart, overlapEnd };
+      })
+      .filter((entry): entry is ParsedMarkdownLink & { overlapStart: number; overlapEnd: number } => Boolean(entry))
+      .sort((a, b) => a.overlapStart - b.overlapStart);
+
+    let xCursor = x;
+    let cursor = lineStart;
+    for (const overlap of overlaps) {
+      if (overlap.overlapStart > cursor) {
+        const plain = line.slice(cursor - lineStart, overlap.overlapStart - lineStart);
+        if (plain.length > 0) {
+          page.drawText(plain, {
+            x: xCursor,
+            y,
+            size: fontSize,
+            font,
+            color: baseColor
+          });
+          xCursor += font.widthOfTextAtSize(plain, fontSize);
+        }
+      }
+
+      const linkText = line.slice(overlap.overlapStart - lineStart, overlap.overlapEnd - lineStart);
+      if (linkText.length > 0) {
+        const linkWidth = font.widthOfTextAtSize(linkText, fontSize);
+        page.drawText(linkText, {
+          x: xCursor,
+          y,
+          size: fontSize,
+          font,
+          color: linkColor
+        });
+        page.drawLine({
+          start: { x: xCursor, y: y - 1 },
+          end: { x: xCursor + linkWidth, y: y - 1 },
+          thickness: 0.5,
+          color: linkColor
+        });
+        addLinkAnnotation(page, overlap.url, xCursor, y - 1, linkWidth, fontSize + 2);
+        xCursor += linkWidth;
+      }
+      cursor = overlap.overlapEnd;
+    }
+
+    if (cursor < lineEnd) {
+      const tail = line.slice(cursor - lineStart, lineEnd - lineStart);
+      if (tail.length > 0) {
+        page.drawText(tail, {
+          x: xCursor,
+          y,
+          size: fontSize,
+          font,
+          color: baseColor
+        });
+      }
+    }
+  };
+
   const drawHeader = (isContinuation: boolean): number => {
     if (!isContinuation) {
       return PAGE_HEIGHT - MARGIN;
@@ -148,8 +361,7 @@ export async function GET(): Promise<Response> {
     return headerY - 22 - TOP_PADDING;
   };
 
-  const drawSidebar = (sidebarTopY: number): void => {
-    let sidebarY = sidebarTopY;
+  const drawSidebarBackground = (): void => {
     page.drawRectangle({
       x: sidebarX,
       y: 0,
@@ -176,6 +388,11 @@ export async function GET(): Promise<Response> {
       color: COLORS.sidebarOverlay,
       opacity: 0.75
     });
+  };
+
+  const drawSidebar = (sidebarTopY: number): void => {
+    let sidebarY = sidebarTopY;
+    drawSidebarBackground();
 
     const drawSidebarHeading = (label: string): void => {
       sidebarY -= 2;
@@ -308,15 +525,28 @@ export async function GET(): Promise<Response> {
 
     const drawSidebarItems = (items: string[]): void => {
       for (const item of items) {
-        const lines = wrapText(item, sidebarWidth - SIDEBAR_INNER_PADDING * 2, BODY_SIZE, bodyFont);
+        const parsed = parseMarkdownLinks(item);
+        const lines = wrapText(parsed.text, sidebarWidth - SIDEBAR_INNER_PADDING * 2, BODY_SIZE, bodyFont);
+        let cursor = 0;
         for (const line of lines) {
-          page.drawText(line, {
+          const lineStart = parsed.text.indexOf(line, cursor);
+          const safeLineStart = lineStart >= 0 ? lineStart : cursor;
+          const lineEnd = safeLineStart + line.length;
+          cursor = lineEnd;
+
+          drawLinkedLine({
+            line,
+            lineStart: safeLineStart,
+            lineEnd,
+            links: parsed.links,
             x: sidebarX + SIDEBAR_INNER_PADDING,
             y: sidebarY,
-            size: BODY_SIZE,
+            fontSize: BODY_SIZE,
             font: bodyFont,
-            color: COLORS.sidebarText
+            baseColor: COLORS.sidebarText,
+            linkColor: COLORS.linkSidebar
           });
+
           sidebarY -= LINE_HEIGHT;
         }
       }
@@ -334,13 +564,13 @@ export async function GET(): Promise<Response> {
 
     drawSidebarHeading("SKILLS & OTHER");
     const sidebarSkills = model.skills
-      .map((item) => item.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").trim())
+      .map((item) => item.trim())
       .filter((item) => item.length > 0)
       .slice(0, 6);
     drawSidebarItems(sidebarSkills);
 
     const sidebarExtracurriculars = model.extracurriculars
-      .map((item) => item.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").trim())
+      .map((item) => item.trim())
       .filter((item) => item.length > 0)
       .slice(0, 3);
     if (sidebarExtracurriculars.length > 0) {
@@ -351,7 +581,9 @@ export async function GET(): Promise<Response> {
 
   const createContinuationPage = (): number => {
     page = pdf.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
-    return drawHeader(true);
+    const continuationTopY = drawHeader(true);
+    drawSidebarBackground();
+    return continuationTopY;
   };
 
   let contentStartY = drawHeader(false);
@@ -368,27 +600,40 @@ export async function GET(): Promise<Response> {
       color: COLORS.accent
     });
     page.drawLine({
-      start: { x: mainX, y: y - 1 },
-      end: { x: mainX + mainWidth, y: y - 1 },
+      start: { x: mainX, y: y - 2 },
+      end: { x: mainX + mainWidth, y: y - 2 },
       thickness: 0.6,
       color: COLORS.divider
     });
-    y -= LINE_HEIGHT + 1;
+    y -= LINE_HEIGHT + HEADING_BODY_GAP;
   };
 
   const drawMainParagraph = (text: string, indent = 0): void => {
-    const lines = wrapText(text, mainWidth - indent, BODY_SIZE, bodyFont);
+    const parsed = parseMarkdownLinks(text);
+    const lines = wrapText(parsed.text, mainWidth - indent, BODY_SIZE, bodyFont);
+    let cursor = 0;
     for (const line of lines) {
+      const lineStart = parsed.text.indexOf(line, cursor);
+      const safeLineStart = lineStart >= 0 ? lineStart : cursor;
+      const lineEnd = safeLineStart + line.length;
+      cursor = lineEnd;
+
       if (y - LINE_HEIGHT <= MARGIN) {
         y = createContinuationPage();
       }
-      page.drawText(line, {
+      drawLinkedLine({
+        line,
+        lineStart: safeLineStart,
+        lineEnd,
+        links: parsed.links,
         x: mainX + indent,
         y,
-        size: BODY_SIZE,
+        fontSize: BODY_SIZE,
         font: bodyFont,
-        color: COLORS.text
+        baseColor: COLORS.text,
+        linkColor: COLORS.link
       });
+
       y -= LINE_HEIGHT;
     }
   };
@@ -441,6 +686,21 @@ export async function GET(): Promise<Response> {
     }
     y -= SECTION_SPACING;
   });
+
+  if (model.sideQuests.length > 0) {
+    if (y - LINE_HEIGHT * 3 <= MARGIN) {
+      y = createContinuationPage();
+    }
+    drawMainHeading("SIDE QUESTS");
+    for (const sideQuest of model.sideQuests) {
+      drawMainParagraph(sideQuest.title, 8);
+      for (const detail of sideQuest.details) {
+        drawMainParagraph(`• ${detail}`, 14);
+      }
+      y -= 2;
+    }
+    y -= SECTION_SPACING;
+  }
 
   const bytes = await pdf.save();
   const output = new Uint8Array(bytes);

@@ -32,7 +32,10 @@ export type ResumePdfModel = {
   location: string;
   summary: string;
   skills: string[];
-  sideQuests: string[];
+  sideQuests: Array<{
+    title: string;
+    details: string[];
+  }>;
   extracurriculars: string[];
   experiences: Array<{
     title: string;
@@ -69,13 +72,42 @@ function extractParagraph(raw: string): string {
     .trim();
 }
 
-function extractSubsectionHeadings(raw: string): string[] {
-  return raw
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.startsWith("## "))
-    .map((line) => line.replace(/^##\s+/, "").replace(/\s+\{#[a-zA-Z0-9_-]+\}\s*$/, "").trim())
-    .filter(Boolean);
+function extractSubsectionsWithDetails(raw: string): Array<{ title: string; details: string[] }> {
+  const sections: Array<{ title: string; details: string[] }> = [];
+  let active: { title: string; details: string[] } | undefined;
+
+  for (const line of raw.split("\n")) {
+    const trimmed = line.trim();
+    if (trimmed.startsWith("## ")) {
+      if (active && active.title) {
+        sections.push(active);
+      }
+      active = {
+        title: trimmed.replace(/^##\s+/, "").replace(/\s+\{#[a-zA-Z0-9_-]+\}\s*$/, "").trim(),
+        details: []
+      };
+      continue;
+    }
+
+    if (!active || !trimmed) {
+      continue;
+    }
+
+    if (trimmed.startsWith("- ")) {
+      active.details.push(trimmed.replace(/^- /, "").trim());
+      continue;
+    }
+
+    if (!trimmed.startsWith("#")) {
+      active.details.push(trimmed);
+    }
+  }
+
+  if (active && active.title) {
+    sections.push(active);
+  }
+
+  return sections.filter((section) => section.title.length > 0);
 }
 
 function extractListItemsFromSubheading(raw: string, heading: string): string[] {
@@ -181,7 +213,7 @@ export function buildResumePdfModel(cvData: ResumePdfData, markdown: string): Re
     skills: skillsRaw && skillsRaw.type === "markdown" ? extractListItems(skillsRaw.raw) : [],
     sideQuests:
       sideQuestsRaw && sideQuestsRaw.type === "markdown"
-        ? extractSubsectionHeadings(sideQuestsRaw.raw)
+        ? extractSubsectionsWithDetails(sideQuestsRaw.raw)
         : [],
     extracurriculars:
       extracurricularsFromDedicatedSection.length > 0

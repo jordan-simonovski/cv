@@ -167,7 +167,7 @@ describe("buildResumePdfModel", () => {
     expect(model.contact.phone).toBe("+61 451 309 913");
   });
 
-  it("extracts side quest headings from projects section", () => {
+  it("extracts side quest headings and details from projects section", () => {
     const markdown = [
       "# Summary {#summary}",
       "",
@@ -204,8 +204,55 @@ describe("buildResumePdfModel", () => {
     );
 
     expect(model.sideQuests).toEqual([
-      "K8s Cost and Reliability Control Plane",
-      "Incident Triage Copilot for Observability Workflows"
+      {
+        title: "K8s Cost and Reliability Control Plane",
+        details: ["Reduced failed rollout blast radius."]
+      },
+      {
+        title: "Incident Triage Copilot for Observability Workflows",
+        details: ["Improved time-to-first-query."]
+      }
+    ]);
+  });
+
+  it("keeps markdown link labels for PDF text content", () => {
+    const markdown = [
+      "# Summary {#summary}",
+      "",
+      "Fallback summary.",
+      "",
+      "# Core Skills {#skills}",
+      "",
+      "- [OpenTelemetry](https://opentelemetry.io/)",
+      "",
+      "# Side Quests {#projects}",
+      "",
+      "## Helm Coverage Tooling",
+      "",
+      "- [HelmCov](https://github.com/jordan-simonovski/helmcov) improves chart branch coverage.",
+      ""
+    ].join("\n");
+
+    const model = buildResumePdfModel(
+      {
+        title: "Jordan Simonovski",
+        role: "Cloud Engineering Lead",
+        location: "Blue Mountains, Australia",
+        email: "jordan.simonovski@gmail.com",
+        website: "https://blog.jordansimonov.ski",
+        github: "https://github.com/jordan-simonovski",
+        linkedin: "https://www.linkedin.com/in/jsimonovski/",
+        experienceSpans: []
+      },
+      markdown
+    );
+
+    expect(model.skills).toEqual(["[OpenTelemetry](https://opentelemetry.io/)"]);
+    expect(model.sideQuests).toEqual([
+      {
+        title: "Helm Coverage Tooling",
+        details: ["[HelmCov](https://github.com/jordan-simonovski/helmcov) improves chart branch coverage."]
+      }
     ]);
   });
 
