@@ -186,10 +186,6 @@ export async function GET(): Promise<Response> {
     (await tryEmbedImage("../assets/jordan.jpg")) ??
     (await tryEmbedImage("../assets/jordan.png")) ??
     (await tryEmbedImage("../assets/jordan.webp"));
-  const sidebarSplashImage =
-    (await tryEmbedImage("../assets/splashback.jpg")) ??
-    (await tryEmbedImage("../assets/splashback.png")) ??
-    (await tryEmbedImage("../assets/splashback.webp"));
   let y = PAGE_HEIGHT - MARGIN;
 
   const maxWidth = PAGE_WIDTH;
@@ -369,17 +365,6 @@ export async function GET(): Promise<Response> {
       height: PAGE_HEIGHT,
       color: rgb(0.12, 0.13, 0.17)
     });
-    if (sidebarSplashImage) {
-      const splashWidth = sidebarWidth;
-      const splashScale = splashWidth / sidebarSplashImage.width;
-      const splashHeight = sidebarSplashImage.height * splashScale;
-      page.drawImage(sidebarSplashImage, {
-        x: sidebarX,
-        y: (PAGE_HEIGHT - splashHeight) / 2,
-        width: splashWidth,
-        height: splashHeight
-      });
-    }
     page.drawRectangle({
       x: sidebarX,
       y: 0,
