@@ -1,6 +1,17 @@
 import { getCollection } from "astro:content";
 import { readFile } from "node:fs/promises";
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import {
+  PDFDocument,
+  StandardFonts,
+  appendBezierCurve,
+  clip,
+  closePath,
+  endPath,
+  moveTo,
+  popGraphicsState,
+  pushGraphicsState,
+  rgb
+} from "pdf-lib";
 import type { PDFFont, PDFImage } from "pdf-lib";
 
 import { buildResumePdfModel } from "../lib/resumePdf";
@@ -9,23 +20,27 @@ export const prerender = true;
 
 const PAGE_WIDTH = 595.28;
 const PAGE_HEIGHT = 841.89;
-const MARGIN = 34;
-const TOP_PADDING = 30;
-const SIDEBAR_WIDTH = 176;
-const COLUMN_GAP = 24;
+const MARGIN = 28;
+const TOP_PADDING = 18;
+const SIDEBAR_WIDTH = 214;
+const COLUMN_GAP = 28;
 const BODY_SIZE = 9;
-const HEADING_SIZE = 11;
-const ROLE_SIZE = 10;
-const TITLE_SIZE = 26;
-const LINE_HEIGHT = 12.5;
-const SECTION_SPACING = 9;
-const SIDEBAR_INNER_PADDING = 6;
+const HEADING_SIZE = 12.5;
+const ROLE_SIZE = 10.5;
+const TITLE_SIZE = 27;
+const LINE_HEIGHT = 12;
+const SECTION_SPACING = 8;
+const SIDEBAR_INNER_PADDING = 14;
 
 const COLORS = {
   text: rgb(0.1, 0.14, 0.2),
   muted: rgb(0.35, 0.4, 0.5),
   accent: rgb(0.05, 0.08, 0.14),
-  divider: rgb(0.78, 0.8, 0.85)
+  divider: rgb(0.78, 0.8, 0.85),
+  sidebarOverlay: rgb(0.08, 0.1, 0.14),
+  sidebarHeading: rgb(0.92, 0.94, 0.98),
+  sidebarText: rgb(0.96, 0.97, 1),
+  sidebarMuted: rgb(0.8, 0.84, 0.9)
 };
 
 function wrapText(text: string, maxWidth: number, fontSize: number, font: PDFFont): string[] {
@@ -64,19 +79,34 @@ export async function GET(): Promise<Response> {
   let page = pdf.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
   const titleFont = await pdf.embedFont(StandardFonts.HelveticaBold);
   const bodyFont = await pdf.embedFont(StandardFonts.Helvetica);
-  let profileImage: PDFImage | undefined;
-  try {
-    const bytes = await readFile(new URL("../assets/jordan.jpg", import.meta.url));
-    profileImage = await pdf.embedJpg(bytes);
-  } catch {
-    profileImage = undefined;
-  }
+  const tryEmbedImage = async (relativePath: string): Promise<PDFImage | undefined> => {
+    try {
+      const bytes = await readFile(new URL(relativePath, import.meta.url));
+      if (/\.(jpe?g)$/i.test(relativePath)) {
+        return await pdf.embedJpg(bytes);
+      }
+      if (/\.(png)$/i.test(relativePath)) {
+        return await pdf.embedPng(bytes);
+      }
+      return undefined;
+    } catch {
+      return undefined;
+    }
+  };
+  const profileImage =
+    (await tryEmbedImage("../assets/jordan.jpg")) ??
+    (await tryEmbedImage("../assets/jordan.png")) ??
+    (await tryEmbedImage("../assets/jordan.webp"));
+  const sidebarSplashImage =
+    (await tryEmbedImage("../assets/splashback.jpg")) ??
+    (await tryEmbedImage("../assets/splashback.png")) ??
+    (await tryEmbedImage("../assets/splashback.webp"));
   let y = PAGE_HEIGHT - MARGIN;
 
-  const maxWidth = PAGE_WIDTH - MARGIN * 2;
-  const mainX = MARGIN + SIDEBAR_WIDTH + COLUMN_GAP;
-  const mainWidth = maxWidth - SIDEBAR_WIDTH - COLUMN_GAP;
-  const sidebarX = MARGIN;
+  const maxWidth = PAGE_WIDTH;
+  const mainX = SIDEBAR_WIDTH + COLUMN_GAP;
+  const mainWidth = maxWidth - mainX - MARGIN;
+  const sidebarX = 0;
   const sidebarWidth = SIDEBAR_WIDTH;
 
   const ensureSpace = (required: number): void => {
@@ -87,79 +117,71 @@ export async function GET(): Promise<Response> {
   };
 
   const drawHeader = (isContinuation: boolean): number => {
-    const headerTop = PAGE_HEIGHT - MARGIN;
-    const nameLines = model.name
-      .split(/\s+/)
-      .filter(Boolean)
-      .map((part) => part.toUpperCase());
-
-    let headerY = headerTop;
-    if (isContinuation) {
-      page.drawText(model.name.toUpperCase(), {
-        x: MARGIN,
-        y: headerY,
-        size: 13,
-        font: titleFont,
-        color: COLORS.accent
-      });
-      headerY -= 16;
-      page.drawText("EXPERIENCE CONTD.", {
-        x: MARGIN,
-        y: headerY,
-        size: 10,
-        font: titleFont,
-        color: COLORS.muted
-      });
-      headerY -= 16;
-    } else {
-      for (const line of nameLines) {
-        page.drawText(line, {
-          x: MARGIN,
-          y: headerY,
-          size: TITLE_SIZE,
-          font: titleFont,
-          color: COLORS.accent
-        });
-        headerY -= 25;
-      }
-      page.drawText(model.role.toUpperCase(), {
-        x: MARGIN,
-        y: headerY,
-        size: ROLE_SIZE,
-        font: titleFont,
-        color: COLORS.muted
-      });
-      headerY -= 17;
-      page.drawText(model.location, {
-        x: MARGIN,
-        y: headerY,
-        size: BODY_SIZE,
-        font: bodyFont,
-        color: COLORS.muted
-      });
-      headerY -= 15;
+    if (!isContinuation) {
+      return PAGE_HEIGHT - MARGIN;
     }
 
+    const headerY = PAGE_HEIGHT - MARGIN;
+    page.drawText(model.name.toUpperCase(), {
+      x: mainX,
+      y: headerY,
+      size: 13,
+      font: titleFont,
+      color: COLORS.accent
+    });
+    page.drawText("EXPERIENCE CONTD.", {
+      x: mainX,
+      y: headerY - 16,
+      size: 10,
+      font: titleFont,
+      color: COLORS.muted
+    });
     page.drawLine({
-      start: { x: MARGIN, y: headerY },
-      end: { x: PAGE_WIDTH - MARGIN, y: headerY },
+      start: { x: mainX, y: headerY - 22 },
+      end: { x: PAGE_WIDTH - MARGIN, y: headerY - 22 },
       thickness: 1,
       color: COLORS.divider
     });
-    return headerY - TOP_PADDING;
+    return headerY - 22 - TOP_PADDING;
   };
 
   const drawSidebar = (sidebarTopY: number): void => {
     let sidebarY = sidebarTopY;
+    page.drawRectangle({
+      x: sidebarX,
+      y: 0,
+      width: sidebarWidth,
+      height: PAGE_HEIGHT,
+      color: rgb(0.12, 0.13, 0.17)
+    });
+    if (sidebarSplashImage) {
+      const splashScale = Math.max(sidebarWidth / sidebarSplashImage.width, PAGE_HEIGHT / sidebarSplashImage.height);
+      const splashWidth = sidebarSplashImage.width * splashScale;
+      const splashHeight = sidebarSplashImage.height * splashScale;
+      page.drawImage(sidebarSplashImage, {
+        x: sidebarX + (sidebarWidth - splashWidth) / 2,
+        y: (PAGE_HEIGHT - splashHeight) / 2,
+        width: splashWidth,
+        height: splashHeight
+      });
+    }
+    page.drawRectangle({
+      x: sidebarX,
+      y: 0,
+      width: sidebarWidth,
+      height: PAGE_HEIGHT,
+      color: COLORS.sidebarOverlay,
+      opacity: 0.75
+    });
 
     const drawSidebarHeading = (label: string): void => {
       sidebarY -= 2;
       page.drawText(label, {
-        x: sidebarX,
+        x: sidebarX + SIDEBAR_INNER_PADDING,
         y: sidebarY,
         size: HEADING_SIZE,
         font: titleFont,
-        color: COLORS.accent
+        color: COLORS.sidebarHeading
       });
       sidebarY -= LINE_HEIGHT;
     };
@@ -170,32 +192,106 @@ export async function GET(): Promise<Response> {
         y: sidebarY,
         size: BODY_SIZE,
         font: titleFont,
-        color: COLORS.muted
+        color: COLORS.sidebarMuted
       });
       sidebarY -= LINE_HEIGHT;
     };
 
-    if (profileImage) {
-      const maxImageWidth = sidebarWidth - SIDEBAR_INNER_PADDING * 2;
-      const imageScale = maxImageWidth / profileImage.width;
-      const imageWidth = maxImageWidth;
+    const drawCircularProfile = (): void => {
+      if (!profileImage) {
+        return;
+      }
+
+      const radius = 56;
+      const centerX = sidebarX + sidebarWidth / 2;
+      const centerY = PAGE_HEIGHT - 108;
+      const kappa = 0.552284749831;
+      const control = radius * kappa;
+
+      page.pushOperators(
+        pushGraphicsState(),
+        moveTo(centerX + radius, centerY),
+        appendBezierCurve(
+          centerX + radius,
+          centerY + control,
+          centerX + control,
+          centerY + radius,
+          centerX,
+          centerY + radius
+        ),
+        appendBezierCurve(
+          centerX - control,
+          centerY + radius,
+          centerX - radius,
+          centerY + control,
+          centerX - radius,
+          centerY
+        ),
+        appendBezierCurve(
+          centerX - radius,
+          centerY - control,
+          centerX - control,
+          centerY - radius,
+          centerX,
+          centerY - radius
+        ),
+        appendBezierCurve(
+          centerX + control,
+          centerY - radius,
+          centerX + radius,
+          centerY - control,
+          centerX + radius,
+          centerY
+        ),
+        closePath(),
+        clip(),
+        endPath()
+      );
+
+      const imageScale = Math.max((radius * 2) / profileImage.width, (radius * 2) / profileImage.height);
+      const imageWidth = profileImage.width * imageScale;
       const imageHeight = profileImage.height * imageScale;
       page.drawImage(profileImage, {
-        x: sidebarX + SIDEBAR_INNER_PADDING,
-        y: sidebarY - imageHeight + 2,
+        x: centerX - imageWidth / 2,
+        y: centerY - imageHeight / 2,
         width: imageWidth,
         height: imageHeight
       });
-      page.drawRectangle({
-        x: sidebarX + SIDEBAR_INNER_PADDING,
-        y: sidebarY - imageHeight + 2,
-        width: imageWidth,
-        height: imageHeight,
-        borderWidth: 0.8,
-        borderColor: COLORS.divider
+      page.pushOperators(popGraphicsState());
+
+      page.drawCircle({
+        x: centerX,
+        y: centerY,
+        size: radius + 1.5,
+        borderColor: rgb(1, 1, 1),
+        borderWidth: 2.5,
+        color: undefined
       });
-      sidebarY -= imageHeight + SECTION_SPACING;
-    }
+    };
+    drawCircularProfile();
+
+    page.drawText(model.name.toUpperCase(), {
+      x: sidebarX + SIDEBAR_INNER_PADDING,
+      y: PAGE_HEIGHT - 194,
+      size: TITLE_SIZE - 2,
+      font: titleFont,
+      color: COLORS.sidebarText
+    });
+    page.drawText(model.role, {
+      x: sidebarX + SIDEBAR_INNER_PADDING,
+      y: PAGE_HEIGHT - 216,
+      size: ROLE_SIZE,
+      font: bodyFont,
+      color: COLORS.sidebarMuted
+    });
+    page.drawText(model.location, {
+      x: sidebarX + SIDEBAR_INNER_PADDING,
+      y: PAGE_HEIGHT - 232,
+      size: BODY_SIZE,
+      font: bodyFont,
+      color: COLORS.sidebarMuted
+    });
+    sidebarY = PAGE_HEIGHT - 266;
 
     const drawSidebarItems = (items: string[]): void => {
       for (const item of items) {
@@ -206,7 +302,7 @@ export async function GET(): Promise<Response> {
             y: sidebarY,
             size: BODY_SIZE,
             font: bodyFont,
-            color: COLORS.text
+            color: COLORS.sidebarText
           });
           sidebarY -= LINE_HEIGHT;
         }
@@ -254,7 +350,7 @@ export async function GET(): Promise<Response> {
     page.drawText(heading, {
       x: mainX,
       y,
-      size: HEADING_SIZE,
+      size: HEADING_SIZE + 1.5,
       font: titleFont,
       color: COLORS.accent
     });
