@@ -230,15 +230,6 @@ export async function GET(): Promise<Response> {
       .slice(0, 6);
     drawSidebarItems(sidebarSkills);
 
-    const sidebarSideQuests = model.sideQuests
-      .map((item) => item.trim())
-      .filter((item) => item.length > 0)
-      .slice(0, 3);
-    if (sidebarSideQuests.length > 0) {
-      drawSidebarSubheading("SIDE QUESTS");
-      drawSidebarItems(sidebarSideQuests);
-    }
-
     const sidebarExtracurriculars = model.extracurriculars
       .map((item) => item.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").trim())
       .filter((item) => item.length > 0)
