@@ -78,6 +78,25 @@ function extractSubsectionHeadings(raw: string): string[] {
     .filter(Boolean);
 }
 
+function extractListItemsFromSubheading(raw: string, heading: string): string[] {
+  const targetHeading = heading.trim().toLowerCase();
+  let activeSubheading = "";
+  const items: string[] = [];
+
+  for (const line of raw.split("\n")) {
+    const trimmed = line.trim();
+    if (trimmed.startsWith("## ")) {
+      activeSubheading = trimmed.replace(/^##\s+/, "").toLowerCase();
+      continue;
+    }
+    if (activeSubheading === targetHeading && trimmed.startsWith("- ")) {
+      items.push(trimmed.replace(/^- /, "").trim());
+    }
+  }
+
+  return items.filter(Boolean);
+}
+
 function stripMarkdownLinks(text: string): string {
   return text.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").trim();
 }
@@ -135,15 +154,24 @@ export function buildResumePdfModel(cvData: ResumePdfData, markdown: string): Re
     (block) => block.type === "markdown" && block.sectionId === "summary"
   );
   const skillsRaw = blocks.find((block) => block.type === "markdown" && block.sectionId === "skills");
+  const sideQuestsRaw = blocks.find((block) => block.type === "markdown" && block.sectionId === "projects");
   const extracurricularsRaw = blocks.find(
     (block) => block.type === "markdown" && block.sectionId === "extracurriculars"
   );
-  const sideQuestsRaw = blocks.find((block) => block.type === "markdown" && block.sectionId === "projects");
   const contactRaw = blocks.find((block) => block.type === "markdown" && block.sectionId === "contact");
   const contactItems = contactRaw && contactRaw.type === "markdown" ? extractListItems(contactRaw.raw) : [];
   const phoneFromMarkdown = contactItems
     .map((item) => extractLabeledValue(item, "Phone"))
     .find(Boolean);
+
+  const extracurricularsFromDedicatedSection =
+    extracurricularsRaw && extracurricularsRaw.type === "markdown"
+      ? extractListItems(extracurricularsRaw.raw)
+      : [];
+  const extracurricularsFromProjectsSection =
+    sideQuestsRaw && sideQuestsRaw.type === "markdown"
+      ? extractListItemsFromSubheading(sideQuestsRaw.raw, "Extracurriculars")
+      : [];
 
   return {
     name: cvData.title,
@@ -156,9 +184,9 @@ export function buildResumePdfModel(cvData: ResumePdfData, markdown: string): Re
         ? extractSubsectionHeadings(sideQuestsRaw.raw)
         : [],
     extracurriculars:
-      extracurricularsRaw && extracurricularsRaw.type === "markdown"
-        ? extractListItems(extracurricularsRaw.raw)
-        : [],
+      extracurricularsFromDedicatedSection.length > 0
+        ? extracurricularsFromDedicatedSection
+        : extracurricularsFromProjectsSection,
     experiences: cvData.experienceSpans.map((span) => {
       const pdfSpecificHighlights = span.pdfHighlights ?? [];
       return {
