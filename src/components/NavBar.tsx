@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AppIcon from "./AppIcon";
 import type { IconName } from "../lib/iconRegistry";
-import type { NavItem } from "../lib/navigation";
+import { maybeScrollActiveNavToActiveItem, type NavItem } from "../lib/navigation";
 
 type Props = {
   items: NavItem[];
@@ -47,6 +47,7 @@ function getNavIcon(item: NavItem): IconName {
 
 export default function NavBar({ items }: Props) {
   const [activeHref, setActiveHref] = useState<string>("");
+  const navRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const anchors = items
@@ -79,8 +80,24 @@ export default function NavBar({ items }: Props) {
     };
   }, [items]);
 
+  useEffect(() => {
+    const navShell = navRef.current;
+    if (!navShell) {
+      return;
+    }
+    const links = Array.from(navShell.querySelectorAll<HTMLAnchorElement>(".nav-link"));
+    maybeScrollActiveNavToActiveItem({
+      activeHref,
+      isMobileViewport: window.matchMedia("(max-width: 980px)").matches,
+      links,
+      scrollLink: (link) => {
+        link.scrollIntoView({ block: "nearest", inline: "center", behavior: "auto" });
+      }
+    });
+  }, [activeHref]);
+
   return (
-    <nav className="nav-shell" aria-label="Resume navigation">
+    <nav ref={navRef} className="nav-shell" aria-label="Resume navigation">
       <p className="nav-query">query: section where visible=true</p>
       <ul className="nav-list">
         {items.map((item) => (

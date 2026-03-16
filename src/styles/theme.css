@@ -195,7 +195,10 @@ button:focus-visible {
 
 .console-nav {
   min-width: 0;
-  position: relative;
+  position: sticky;
+  top: 0.8rem;
+  z-index: 20;
+  align-self: start;
 }
 
 .console-main {
@@ -323,8 +326,7 @@ button:focus-visible {
   border-radius: var(--radius);
   background: rgba(15, 22, 35, 0.92);
   padding: 0.7rem;
-  position: sticky;
-  top: 0.8rem;
+  position: static;
 }
 
 .nav-query {
@@ -636,7 +638,7 @@ button:focus-visible {
 
 .waterfall-highlight-chip {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 0.9rem minmax(0, 1fr);
   align-items: start;
   gap: 0.45rem;
   border: 1px solid rgba(117, 141, 255, 0.28);
@@ -661,9 +663,11 @@ button:focus-visible {
 }
 
 .waterfall-highlight-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: var(--otel);
   font-size: 0.76rem;
-  transform: translateY(0.2rem);
 }
 
 .waterfall-highlight-chip[data-status="warn"] .waterfall-highlight-icon {
@@ -675,9 +679,12 @@ button:focus-visible {
 }
 
 .waterfall-highlight-text {
+  min-width: 0;
+  display: block;
   color: var(--text-soft);
   line-height: 1.35;
   font-size: 0.82rem;
+  overflow-wrap: anywhere;
 }
 
 .waterfall-highlight-text .is-emphasized {
@@ -1001,6 +1008,7 @@ button:focus-visible {
 
   .console-nav {
     order: -1;
+    top: 0;
   }
 
   .console-nav::after {
@@ -1012,10 +1020,6 @@ button:focus-visible {
     width: 1.5rem;
     background: linear-gradient(90deg, rgba(15, 22, 35, 0), rgba(15, 22, 35, 0.95));
     pointer-events: none;
-  }
-
-  .nav-shell {
-    position: static;
   }
 
   .nav-list {
@@ -1084,6 +1088,17 @@ button:focus-visible {
 
   .hero h1 {
     font-size: 1.7rem;
+  }
+
+  .waterfall-highlight-chip {
+    grid-template-columns: 0.85rem minmax(0, 1fr);
+    gap: 0.35rem;
+    border-radius: 12px;
+    padding: 0.34rem 0.5rem;
+  }
+
+  .waterfall-highlight-icon {
+    font-size: 0.72rem;
   }
 }
 
