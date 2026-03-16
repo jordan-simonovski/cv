@@ -199,20 +199,18 @@ Staff engineer owning global-scale observability infrastructure across Mimir, Te
 
 # Core Skills {#skills}
 
-- Kubernetes platform engineering (EKS, Helm, GitOps, ArgoCD)
+- Kubernetes platform engineering (EKS, Helm, GitOps, ArgoCD, custom operators)
 - AWS (10+ years, full platform scale up, compute, serverless)
-- Docker platforms (ECS, Nomad, Rancher, Kubernetes)
+- Docker platforms (Kubernetes, EKS, GKE)
 - OpenTelemetry ecosystem (Weaver, Collector, SDK)
 - Metrics pipelines (Prometheus, Mimir)
-- Observability (DataDog, Prometheus, Grafana)
+- Observability (Prometheus/Mimir, Grafana, Tempo/ClickHouse)
 - IaC with Terraform/Crossplane and CI/CD with GitHub Actions/Bitbucket Pipelines
 - Golang, Typescript, and Rust development
 - Platform engineering i.e. building, validating and running internal products.
 - Avid speaker and mentor (especially junior engineers)
 
 # Experience {#experience}
-
-Interactive timeline below shows role depth. Quick text fallback for recruiter and ATS scans:
 
 ## Staff Software Engineer - Atlassian (2020-05 to Present)
 
@@ -224,14 +222,19 @@ Interactive timeline below shows role depth. Quick text fallback for recruiter a
 
 - Evangelised the shift to wide events and implemented ClickHouse observability pipelines at `100TB/day`+ ingestion.
 - Built and operated Grafana Tempo tracing infrastructure at `180TB/day` ingestion.
+- Consistent and continual improvements in CI with reviewdog + Bitbucket pipes to ease developer workflows and feedback.
+- Consistent and continual improvements in CD with ArgoCD/Spinnaker work, focusing on ephemeral build environments.
+- Raised the bar on SLOs both within the observability department and other teams by introducing better practices, and running sessions with teams on good SLOs.
 - Introduced Grafana Scenes internally and shipped a centralised debugging workflow across core Atlassian experiences.
-- Scaled Grafana Mimir and ran usage-accurate load validation for ~200k alert evaluations.
+- Was considered an SME for Mimir/Tempo: scaled Grafana Mimir and ran usage-accurate load validation for ~200k alert evaluations.
 - Standardised Kubernetes deployments with reusable Helm charts built using internal OSS tooling.
 - Integrated an AI-assisted query experience across PromQL, TraceQL, SQL (ClickHouse), and SPL (Splunk).
 - Designed and implemented Atlassian's first covered-experience service map for faster incident triage.
 - Improved Tempo query performance by `30%+` with minimal cost impact.
-- Built a local development observability stack in spare time to improve day-to-day debugging DX.
+- Built a local development observability stack for developers in spare time to improve day-to-day debugging DX.
 - Designed multi-region failover foundations for Grafana and Mimir with low RTO/RPO and controlled cost.
+- Implemented serverless Splunk scaling automation using Lambda Step Functions.
+- Modernised Splunk infrastructure, with a focus on cloud-native platform management. Scaled to 600TB/day ingestion.
 
 </details>
 

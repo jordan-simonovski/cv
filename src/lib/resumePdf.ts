@@ -32,6 +32,7 @@ export type ResumePdfModel = {
   location: string;
   summary: string;
   skills: string[];
+  sideQuests: string[];
   extracurriculars: string[];
   experiences: Array<{
     title: string;
@@ -66,6 +67,15 @@ function extractParagraph(raw: string): string {
     .filter((line) => !line.startsWith("- "))
     .join(" ")
     .trim();
+}
+
+function extractSubsectionHeadings(raw: string): string[] {
+  return raw
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("## "))
+    .map((line) => line.replace(/^##\s+/, "").replace(/\s+\{#[a-zA-Z0-9_-]+\}\s*$/, "").trim())
+    .filter(Boolean);
 }
 
 function stripMarkdownLinks(text: string): string {
@@ -128,6 +138,7 @@ export function buildResumePdfModel(cvData: ResumePdfData, markdown: string): Re
   const extracurricularsRaw = blocks.find(
     (block) => block.type === "markdown" && block.sectionId === "extracurriculars"
   );
+  const sideQuestsRaw = blocks.find((block) => block.type === "markdown" && block.sectionId === "projects");
   const contactRaw = blocks.find((block) => block.type === "markdown" && block.sectionId === "contact");
   const contactItems = contactRaw && contactRaw.type === "markdown" ? extractListItems(contactRaw.raw) : [];
   const phoneFromMarkdown = contactItems
@@ -140,6 +151,10 @@ export function buildResumePdfModel(cvData: ResumePdfData, markdown: string): Re
     location: cvData.location,
     summary: summaryRaw && summaryRaw.type === "markdown" ? extractParagraph(summaryRaw.raw) : "",
     skills: skillsRaw && skillsRaw.type === "markdown" ? extractListItems(skillsRaw.raw) : [],
+    sideQuests:
+      sideQuestsRaw && sideQuestsRaw.type === "markdown"
+        ? extractSubsectionHeadings(sideQuestsRaw.raw)
+        : [],
     extracurriculars:
       extracurricularsRaw && extracurricularsRaw.type === "markdown"
         ? extractListItems(extracurricularsRaw.raw)

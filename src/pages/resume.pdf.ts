@@ -216,8 +216,11 @@ export async function GET(): Promise<Response> {
     const sidebarSkills = model.skills
       .map((item) => item.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").trim())
       .filter((item) => item.length > 0)
-      .slice(0, 10);
-    drawSidebarItems(sidebarSkills);
+      .slice(0, 8);
+    const sidebarSideQuests = model.sideQuests
+      .map((item) => `Side quest: ${item}`)
+      .slice(0, 3);
+    drawSidebarItems([...sidebarSkills, ...sidebarSideQuests]);
   };
 
   const createContinuationPage = (): number => {

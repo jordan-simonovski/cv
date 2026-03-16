@@ -166,4 +166,46 @@ describe("buildResumePdfModel", () => {
 
     expect(model.contact.phone).toBe("+61 451 309 913");
   });
+
+  it("extracts side quest headings from projects section", () => {
+    const markdown = [
+      "# Summary {#summary}",
+      "",
+      "Fallback summary.",
+      "",
+      "# Core Skills {#skills}",
+      "",
+      "- OpenTelemetry",
+      "",
+      "# Side Quests {#projects}",
+      "",
+      "## K8s Cost and Reliability Control Plane",
+      "",
+      "- Reduced failed rollout blast radius.",
+      "",
+      "## Incident Triage Copilot for Observability Workflows",
+      "",
+      "- Improved time-to-first-query.",
+      ""
+    ].join("\n");
+
+    const model = buildResumePdfModel(
+      {
+        title: "Jordan Simonovski",
+        role: "Cloud Engineering Lead",
+        location: "Blue Mountains, Australia",
+        email: "jordan.simonovski@gmail.com",
+        website: "https://blog.jordansimonov.ski",
+        github: "https://github.com/jordan-simonovski",
+        linkedin: "https://www.linkedin.com/in/jsimonovski/",
+        experienceSpans: []
+      },
+      markdown
+    );
+
+    expect(model.sideQuests).toEqual([
+      "K8s Cost and Reliability Control Plane",
+      "Incident Triage Copilot for Observability Workflows"
+    ]);
+  });
 });
