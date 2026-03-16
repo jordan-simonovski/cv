@@ -239,19 +239,7 @@ Staff engineer owning global-scale observability infrastructure across Mimir, Te
 - Implemented K6 for load testing infrastructure at scale, hitting 6M metric samples per second.
 - Led work for, designed, and implemented internal PaaS abstractions for alert management.
 
-
 </details>
-
-## Senior Site Reliability Engineer - Independent Consulting (2019-06 to 2021-12, part-time concurrent)
-
-- Cut paging noise and improved escalation quality through alerting/routing refinements and stronger on-call practices.
-- Automated recurring incident recovery paths with practical runbook workflows.
-
-<details>
-  <summary>Expand full impact</summary>
-
-- Replaced threshold-only paging with burn-rate based alerting patterns to reduce noise.
-- Improved incident response consistency through documented and automated runbook workflows.
 
 </details>
 
@@ -325,14 +313,24 @@ Staff engineer owning global-scale observability infrastructure across Mimir, Te
 
 # Side Quests {#projects}
 
-## K8s Cost and Reliability Control Plane
-
-- Added progressive delivery and rollback automation based on error budget burn rates, reducing failed rollout blast radius.
-
 ## Incident Triage Copilot for Observability Workflows
 
 - Built an assistant-driven query workflow that generated PromQL, TraceQL, and SQL from incident prompts.
 - Reduced time-to-first-useful-query during incident debugging by improving discovery and query authoring ergonomics.
+- I've kicked off an open source build of this in my free time.
+
+## Helm Coverage Tooling
+
+- [HelmCov](https://github.com/jordan-simonovski/helmcov) is a dynamic coverage checker which aims to surface coverage issues in helm charts. This is useful for charts which have a lot of branched templating logic. Testing all paths is ideal.
+
+
+## Helm Semantic Versioning
+
+- [Helmver](https://github.com/jordan-simonovski/helmver) is a tool I wrote because I was really missing some of the nice semantic versioning tooling from the JS ecosystem. It borrows heavily from [changesets](https://github.com/changesets/changesets).
+
+## Heatmap Panel
+
+- I should really rename this. Heatmap panel started off as a "could I do something like Bubble up but for ClickHouse?" and is turning into a lot more as I continue to test out various bits and pieces. [See repo here](https://github.com/jordan-simonovski/heatmap-panel).
 
 ## Local Developer Observability Stack
 
