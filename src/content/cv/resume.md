@@ -349,7 +349,7 @@ Staff engineer owning global-scale observability infrastructure across Mimir, Te
 
 # Contact {#contact}
 
-- Phone: +61 451 309 913
+- Phone: Available upon request
 - Email: [jordan.simonovski@gmail.com](mailto:jordan.simonovski@gmail.com)
 - Website: [jordansimonov.ski](https://jordansimonov.ski)
 - GitHub: [github.com/jordan-simonovski](https://github.com/jordan-simonovski)

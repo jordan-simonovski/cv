@@ -145,7 +145,7 @@ describe("buildResumePdfModel", () => {
       "",
       "# Contact {#contact}",
       "",
-      "- Phone: +61 451 309 913",
+      "- Phone: Available upon request",
       "- Email: [jordan.simonovski@gmail.com](mailto:jordan.simonovski@gmail.com)",
       "- Website: [blog.jordansimonov.ski](https://blog.jordansimonov.ski)"
     ].join("\n");
@@ -164,7 +164,7 @@ describe("buildResumePdfModel", () => {
       markdown
     );
 
-    expect(model.contact.phone).toBe("+61 451 309 913");
+    expect(model.contact.phone).toBe("Available upon request");
   });
 
   it("extracts side quest headings and details from projects section", () => {
