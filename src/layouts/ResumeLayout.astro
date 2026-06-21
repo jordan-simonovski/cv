@@ -1,6 +1,7 @@
 ---
 import "../styles/theme.css";
 import "../styles/print.css";
+import Analytics from "@vercel/analytics/astro";
 import AppIcon from "../components/AppIcon";
 import { getAvailabilityViewModel } from "../lib/availability";
 import profileImage from "../assets/jordan.webp";
@@ -175,5 +176,6 @@ const socialImageUrl = new URL(socialShareImage.src, Astro.url).href;
         </section>
       </div>
     </main>
+    <Analytics />
   </body>
 </html>
