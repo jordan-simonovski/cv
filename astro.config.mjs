@@ -1,10 +1,8 @@
 import { defineConfig } from "astro/config";
-import react from "@astrojs/react";
 
 export default defineConfig({
-  site: "https://example.com",
+  site: "https://jordansimonov.ski",
   output: "static",
-  integrations: [react()],
   markdown: {
     syntaxHighlight: false
   }

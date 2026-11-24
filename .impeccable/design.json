@@ -1,0 +1,288 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-24T00:46:20.129332+00:00",
+  "title": "Design System: Jordan Simonovski — Curriculum Vitae",
+  "extensions": {
+    "colorMeta": {
+      "ultramarine": {
+        "role": "primary",
+        "displayName": "Ultramarine",
+        "tonalRamp": [
+          "#0a1550",
+          "#122183",
+          "#1a33b4",
+          "#1f3fd1",
+          "#4d66e0",
+          "#8396ec",
+          "#b9c4f5",
+          "#e6eafc"
+        ]
+      },
+      "uncoated-paper": {
+        "role": "neutral",
+        "displayName": "Uncoated Paper",
+        "tonalRamp": [
+          "#262522",
+          "#4a4944",
+          "#76746d",
+          "#a3a199",
+          "#c9c7bf",
+          "#e4e2dc",
+          "#f4f3ef",
+          "#fbfaf8"
+        ]
+      },
+      "press-ink": {
+        "role": "neutral",
+        "displayName": "Press Ink",
+        "tonalRamp": [
+          "#15171c",
+          "#24272e",
+          "#363a43",
+          "#4d515b",
+          "#6e727c",
+          "#9599a1",
+          "#c3c5cb",
+          "#ebecee"
+        ]
+      },
+      "body-ink": {
+        "role": "neutral",
+        "displayName": "Body Ink",
+        "tonalRamp": [
+          "#1a1c21",
+          "#2a2d34",
+          "#393d46",
+          "#4f545e",
+          "#71757f",
+          "#989ca4",
+          "#c5c7cc",
+          "#ecedef"
+        ]
+      },
+      "margin-grey": {
+        "role": "neutral",
+        "displayName": "Margin Grey",
+        "tonalRamp": [
+          "#1f2024",
+          "#33353b",
+          "#474a51",
+          "#5b5f68",
+          "#7b7f87",
+          "#a0a3aa",
+          "#c8cacf",
+          "#eeeff1"
+        ]
+      },
+      "soft-rule": {
+        "role": "neutral",
+        "displayName": "Soft Rule",
+        "tonalRamp": [
+          "#2c2b28",
+          "#4f4d48",
+          "#77756e",
+          "#a19f97",
+          "#bdbbb3",
+          "#d5d3cc",
+          "#e7e6e1",
+          "#f6f5f2"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The name only, Archivo wdth 78%, one word per line."
+      },
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "Key-figure values, Archivo wdth 70%, unit at 0.4em."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Hero role line."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Company names in the experience ledger, wdth 85%."
+      },
+      "subtitle": {
+        "displayName": "Subtitle",
+        "purpose": "h3 inside prose."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Profile section text."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "The record, max 68ch, tabular numerals."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Section titles, running head, dates, figure labels; sentence case."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Portrait plate caption."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Full-record disclosure: marker rotation 300ms, content height 420ms."
+      },
+      {
+        "name": "underline",
+        "value": "text-decoration-thickness 160ms ease-out",
+        "purpose": "Link hover, 1px to 2px underline."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "tablet",
+        "value": "1100px"
+      },
+      {
+        "name": "mobile",
+        "value": "820px"
+      }
+    ],
+    "materials": [
+      {
+        "name": "paper-tooth",
+        "value": "fixed fractal-noise SVG layer at opacity 0.05 behind the page",
+        "purpose": "Uncoated stock texture; hidden in print."
+      },
+      {
+        "name": "running-head-glass",
+        "value": "color-mix(in srgb, var(--paper) 94%, transparent) + backdrop-filter: blur(6px)",
+        "purpose": "Sticky running head only."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Link",
+      "kind": "custom",
+      "refersTo": "link",
+      "description": "Ultramarine underlined link; underline thickens on hover.",
+      "html": "<a class=\"ds-link\" href=\"#\">jordansimonov.ski</a>",
+      "css": ".ds-link{color:var(--accent,#1f3fd1);font-family:Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;text-decoration-line:underline;text-decoration-thickness:1px;text-underline-offset:.2em;transition:text-decoration-thickness 160ms ease-out}.ds-link:hover{text-decoration-thickness:2px}.ds-link:focus-visible{outline:2px solid var(--accent,#1f3fd1);outline-offset:3px;border-radius:1px}"
+    },
+    {
+      "name": "Running Head",
+      "kind": "nav",
+      "refersTo": "running-head",
+      "description": "Sticky head: name, numbered section nav, Download PDF; ink base rule.",
+      "html": "<header class=\"ds-rh\"><a class=\"ds-rh-name\" href=\"#\">Jordan Simonovski</a><nav><a href=\"#\"><span>01</span>Profile</a><a href=\"#\"><span>02</span>Experience</a><a href=\"#\"><span>03</span>Skills</a></nav><a class=\"ds-rh-pdf\" href=\"#\">Download PDF <svg viewBox=\"0 0 16 16\" width=\"14\" height=\"14\" aria-hidden=\"true\"><path d=\"M8 2v9M3.5 7 8 11.5 12.5 7M2.5 14h11\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"/></svg></a></header>",
+      "css": ".ds-rh{display:flex;align-items:center;gap:28px;min-height:56px;padding:0 24px;background:color-mix(in srgb,var(--paper,#f4f3ef) 94%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--ink,#15171c);font:400 .875rem/1.6 Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--ink,#15171c)}.ds-rh a{color:inherit;text-decoration:none}.ds-rh-name{font-weight:700;margin-right:auto}.ds-rh nav{display:flex;gap:24px}.ds-rh nav span{color:var(--grey,#5b5f68);font-weight:500;margin-right:.4em}.ds-rh nav a:hover{color:var(--accent,#1f3fd1)}.ds-rh .ds-rh-pdf{margin-left:auto;display:inline-flex;align-items:center;gap:6px;color:var(--accent,#1f3fd1);font-weight:600}.ds-rh .ds-rh-pdf:hover{text-decoration:underline}"
+    },
+    {
+      "name": "Key Figure",
+      "kind": "custom",
+      "refersTo": "figure-value",
+      "description": "Condensed figure with small unit and grey label, under an ink rule.",
+      "html": "<div class=\"ds-fig\"><p class=\"ds-fig-v\">180<span>TB/day</span></p><p class=\"ds-fig-l\">Grafana Tempo tracing, built and run single-handed</p></div>",
+      "css": ".ds-fig{font-family:Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;border-top:1px solid var(--ink,#15171c);padding-top:18px;color:var(--ink,#15171c)}.ds-fig p{margin:0}.ds-fig-v{font-size:4rem;font-stretch:70%;font-weight:600;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}.ds-fig-v span{margin-left:.12em;font-size:.4em;font-weight:500;letter-spacing:0}.ds-fig-l{max-width:26ch;margin-top:10px;color:var(--grey,#5b5f68);font-size:.875rem;line-height:1.45}"
+    },
+    {
+      "name": "Numbered Section",
+      "kind": "custom",
+      "refersTo": "section-title",
+      "description": "Ink rule, numbered label in the margin index, body from col 4.",
+      "html": "<section class=\"ds-sec\"><h2><span>01</span>Profile</h2><p>Senior software engineer on the ClickStack team at ClickHouse.</p></section>",
+      "css": ".ds-sec{display:grid;grid-template-columns:3fr 9fr;gap:24px;padding-top:18px;border-top:1px solid var(--ink,#15171c);font-family:Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--ink,#15171c)}.ds-sec h2{margin:0;font-size:.875rem;font-weight:700;line-height:1.6}.ds-sec h2 span{display:inline-block;min-width:2.1em;color:var(--grey,#5b5f68);font-weight:500}.ds-sec p{margin:0;max-width:60ch;font-size:1.3rem;line-height:1.5}"
+    },
+    {
+      "name": "Experience Entry",
+      "kind": "custom",
+      "refersTo": "entry-company",
+      "description": "Ledger entry: condensed company, current role in ultramarine, dates in the outer margin, dash list.",
+      "html": "<article class=\"ds-entry\"><h3>ClickHouse</h3><p class=\"ds-range\">Jun 2026 – Present</p><p class=\"ds-role\">Senior Software Engineer</p><ul><li>Took the ClickStack Terraform provider resources from alpha to stable.</li></ul></article>",
+      "css": ".ds-entry{display:grid;grid-template-columns:7fr 2fr;column-gap:24px;align-items:baseline;font-family:Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--ink-2,#393d46);font-size:1.0625rem;line-height:1.6}.ds-entry>*{margin:0;grid-column:1}.ds-entry h3{grid-row:1;color:var(--ink,#15171c);font-size:1.625rem;font-stretch:85%;font-weight:700;line-height:1.15;letter-spacing:-.01em}.ds-range{grid-column:2!important;grid-row:1;color:var(--grey,#5b5f68);font-size:.875rem;font-variant-numeric:tabular-nums}.ds-role{margin:2px 0 14px!important;font-weight:600;color:var(--accent,#1f3fd1)}.ds-entry ul{list-style:none;padding:0}.ds-entry li{position:relative;padding-left:1.25em}.ds-entry li::before{content:'';position:absolute;left:0;top:.78em;width:.55em;height:1px;background:var(--ink,#15171c)}"
+    },
+    {
+      "name": "Full-Record Disclosure",
+      "kind": "custom",
+      "refersTo": "disclosure-summary",
+      "description": "Native details with drawn plus that turns to a cross; the one authored motion.",
+      "html": "<details class=\"ds-more\"><summary>Full record <span>16 items</span></summary><p>Further highlights.</p></details>",
+      "css": ".ds-more{font-family:Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--ink,#15171c)}.ds-more summary{display:inline-flex;align-items:center;gap:10px;padding:6px 0;font-size:.875rem;font-weight:600;cursor:pointer;list-style:none}.ds-more summary::-webkit-details-marker{display:none}.ds-more summary::before{content:'';width:11px;height:11px;background:linear-gradient(currentColor,currentColor) center/11px 1.5px no-repeat,linear-gradient(currentColor,currentColor) center/1.5px 11px no-repeat;transition:transform 300ms cubic-bezier(.16,1,.3,1)}.ds-more[open] summary::before{transform:rotate(45deg)}.ds-more summary:hover{color:var(--accent,#1f3fd1)}.ds-more summary:focus-visible{outline:2px solid var(--accent,#1f3fd1);outline-offset:3px}.ds-more summary span{color:var(--grey,#5b5f68);font-weight:400}"
+    },
+    {
+      "name": "Contact List",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Definition list rows divided by soft rules.",
+      "html": "<dl class=\"ds-contact\"><div><dt>Email</dt><dd><a href=\"#\">name@example.com</a></dd></div><div><dt>GitHub</dt><dd><a href=\"#\">github.com/example</a></dd></div></dl>",
+      "css": ".ds-contact{margin:0;font-family:Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:1.0625rem}.ds-contact>div{display:grid;grid-template-columns:minmax(7rem,1fr) 3fr;gap:24px;padding:10px 0;border-bottom:1px solid var(--rule-soft,#d5d3cc)}.ds-contact dt{color:var(--grey,#5b5f68)}.ds-contact dd{margin:0;overflow-wrap:anywhere}.ds-contact a{color:var(--accent,#1f3fd1);text-decoration-thickness:1px;text-underline-offset:.2em}.ds-contact a:hover{text-decoration-thickness:2px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Swiss Annual Report",
+    "overview": "**Creative North Star: \"The Swiss Annual Report\"**\n\nThe career is typeset like a corporate annual report from the Zurich school: one grotesk in several widths, a strict 12-column grid, a margin index column that carries numbered section labels, and real figures set large enough to read as a fact. The page is light, paper-like and quiet. Structure comes from hairline ink rules and grid position, never from containers.\n\nDensity is editorial rather than dashboard: generous vertical air between sections, long measures held to 60–68ch, and a single ultramarine that marks only what is live (links, the current role, open availability). The same system is set a second time as an A4 PDF, so the downloaded resume reads as the printed edition of the web page.",
+    "keyCharacteristics": [
+      "Uncoated cool off-white stock with a 5% fractal-noise tooth, ink near-black text.",
+      "Archivo variable, width as hierarchy: condensed for the name, figures and company names; normal width for reading.",
+      "Margin index column (cols 1–3) holds numbered section labels `01`–`07`; content starts at col 4.",
+      "Every section opens on a 1px ink rule; inner divisions use a soft rule.",
+      "Nothing is enclosed: no cards, boxes, pills, shadows, gradients or radii."
+    ],
+    "rules": [
+      {
+        "name": "The Colour By Role Rule",
+        "body": "Ultramarine means \"live or current\": a link, the present role, open availability. It never decorates headings, rules, figures or backgrounds.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Rules Rule",
+        "body": "Press Ink rules divide sections; Soft Rule divides items within a section. A third rule weight or colour is not part of the system.",
+        "section": "colors"
+      },
+      {
+        "name": "The Width Is Rank Rule",
+        "body": "Condense to rank (name 78%, figures 70%, companies 85%); read at 100%. Never condense running text.",
+        "section": "typography"
+      },
+      {
+        "name": "The Sentence Case Rule",
+        "body": "Labels are sentence case at label size, distinguished by weight and grid position. No uppercase tracking.",
+        "section": "typography"
+      },
+      {
+        "name": "The Rank By Span Rule",
+        "body": "Importance is shown by column span and position, not by size jumps or containers: index in the margin, record in the text column, dates and portrait in the outer margin.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat Stock Rule",
+        "body": "The page is one sheet of paper. Nothing lifts off it; separation is a rule or a gap.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Nothing Enclosed Rule",
+        "body": "No element sits inside a box, card, pill or chip. Groupings are made by a rule above and a grid column, never a border around.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "**Do** place every new block on the 12-column grid by role: labels cols 1–3, reading text cols 4–10, dates and plates cols 11–12.",
+      "**Do** open every section with a 1px Press Ink rule and a numbered label in the margin index.",
+      "**Do** rank with Archivo width and weight (78% name, 70% figures, 85% companies) before reaching for size.",
+      "**Do** keep Ultramarine to links, the current role and open availability.",
+      "**Do** change the web and the PDF together: same sections, numbering, order and palette.",
+      "**Do** keep reading measures at 60–68ch and numerals tabular."
+    ],
+    "donts": [
+      "**Don't** use cards, boxes, pills, chips, shadows, gradients or rounded corners.",
+      "**Don't** add a second typeface or a monospace; inline code stays in Archivo at 600.",
+      "**Don't** colour headings, rules, figures or backgrounds with Ultramarine.",
+      "**Don't** add uppercase tracked labels above headings; labels live in the margin column in sentence case.",
+      "**Don't** add motion beyond link underlines, nav hover colour and the full-record disclosure.",
+      "**Don't** introduce dark mode; the system is light, paper-only."
+    ]
+  }
+}

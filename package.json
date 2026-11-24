@@ -1,7 +1,7 @@
 {
   "name": "cv",
   "version": "1.0.0",
-  "description": "Observability-themed interactive resume built with Astro",
+  "description": "Jordan Simonovski CV site and PDF resume, built with Astro",
   "type": "module",
   "scripts": {
     "dev": "astro dev",
@@ -23,27 +23,15 @@
   },
   "homepage": "https://github.com/jordan-simonovski/cv#readme",
   "dependencies": {
-    "@astrojs/react": "^5.0.0",
-    "@fortawesome/fontawesome-svg-core": "^7.2.0",
-    "@fortawesome/free-brands-svg-icons": "^7.2.0",
-    "@fortawesome/free-solid-svg-icons": "^7.2.0",
-    "@fortawesome/react-fontawesome": "^3.2.0",
+    "@pdf-lib/fontkit": "^1.1.1",
     "@vercel/analytics": "^2.0.1",
     "astro": "^6.0.4",
-    "d3": "^7.9.0",
     "marked": "^17.0.4",
-    "mermaid": "^11.13.0",
-    "pdf-lib": "^1.17.1",
-    "prismjs": "^1.30.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "pdf-lib": "^1.17.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.7",
     "@types/node": "^25.5.0",
-    "@types/prismjs": "^1.26.6",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
     "typescript": "^5.9.3",
     "vitest": "^4.1.0"
   }

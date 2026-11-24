@@ -188,7 +188,8 @@ export function buildResumePdfModel(cvData: ResumePdfData, markdown: string): Re
   const skillsRaw = blocks.find((block) => block.type === "markdown" && block.sectionId === "skills");
   const sideQuestsRaw = blocks.find((block) => block.type === "markdown" && block.sectionId === "projects");
   const extracurricularsRaw = blocks.find(
-    (block) => block.type === "markdown" && block.sectionId === "extracurriculars"
+    (block) =>
+      block.type === "markdown" && (block.sectionId === "extracurriculars" || block.sectionId === "community")
   );
   const contactRaw = blocks.find((block) => block.type === "markdown" && block.sectionId === "contact");
   const contactItems = contactRaw && contactRaw.type === "markdown" ? extractListItems(contactRaw.raw) : [];

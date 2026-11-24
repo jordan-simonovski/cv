@@ -11,12 +11,15 @@ const cv = defineCollection({
     website: z.string().url(),
     github: z.string().url(),
     linkedin: z.string().url(),
+    booking: z.string().url(),
     openToWork: z.boolean(),
     availability: z.string(),
     timezone: z.string(),
     workMode: z.string(),
     responseSla: z.string(),
     updatedAt: z.string(),
+    headline: z.string(),
+    keyFigures: z.array(z.object({ value: z.string(), unit: z.string(), label: z.string() })),
     experienceSpans: z.array(
       z.object({
         id: z.string(),

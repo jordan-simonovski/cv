@@ -1,36 +1,84 @@
 ---
 import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
 
 import MarkdownResume from "../components/MarkdownResume.astro";
-import NavBar from "../components/NavBar";
 import ResumeLayout from "../layouts/ResumeLayout.astro";
-import navigationData from "../config/navigation.json";
-import { validateNavigation } from "../lib/navigation";
+import portrait from "../assets/jordan.jpg";
+import { renderInlineMarkdown } from "../lib/markdown";
+import { buildSections } from "../lib/resumeSections";
 
-const cvCollection = await getCollection("cv");
-const cv = cvCollection[0];
+const cv = (await getCollection("cv"))[0];
 if (!cv) {
   throw new Error("Missing CV markdown entry.");
 }
 
-const navigation = validateNavigation(navigationData);
+const data = cv.data;
+const sections = buildSections(cv.body ?? "");
+const number = (index: number) => String(index + 1).padStart(2, "0");
+const updated = new Date(`${data.updatedAt}T00:00:00`).toLocaleDateString("en-AU", {
+  day: "numeric",
+  month: "short",
+  year: "numeric"
+});
 ---
 
-<ResumeLayout
-  title={cv.data.title}
-  role={cv.data.role}
-  location={cv.data.location}
-  email={cv.data.email}
-  website={cv.data.website}
-  github={cv.data.github}
-  linkedin={cv.data.linkedin}
-  openToWork={cv.data.openToWork}
-  availability={cv.data.availability}
-  timezone={cv.data.timezone}
-  workMode={cv.data.workMode}
-  responseSla={cv.data.responseSla}
-  updatedAt={cv.data.updatedAt}
->
-  <NavBar slot="nav" items={navigation} client:load />
-  <MarkdownResume markdown={cv.body} cvData={cv.data} />
+<ResumeLayout title={data.title} description={data.headline.replace(/\*/g, "")}>
+  <header class="running-head">
+    <div class="shell grid">
+      <a class="rh-name" href="#top">{data.title}</a>
+      <nav class="rh-nav" aria-label="Sections">
+        <ol>
+          {sections.map((section, index) => (
+            <li><a href={`#${section.id}`}><span class="num">{number(index)}</span>{section.title}</a></li>
+          ))}
+        </ol>
+      </nav>
+      <a class="rh-pdf" href="/resume.pdf" download="Jordan-Simonovski-Resume.pdf">
+        Download PDF
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M8 2v9M3.5 7 8 11.5 12.5 7M2.5 14h11" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+      </a>
+    </div>
+  </header>
+
+  <main id="main-content" class="shell">
+    <section class="hero grid" id="top" aria-label="Introduction">
+      <p class="hero-meta"><strong>Curriculum vitae</strong>Updated {updated}</p>
+      <h1>{data.title.split(" ").map((word) => <span>{word}</span>)}</h1>
+      <figure class="plate">
+        <Image src={portrait} alt={`Portrait of ${data.title}`} widths={[240, 400, 640]} sizes="(max-width: 820px) 112px, 15vw" loading="eager" />
+        <figcaption>Fig. 1 — {data.title}, {data.location.split(",")[0]}</figcaption>
+      </figure>
+      <p class="hero-headline" set:html={renderInlineMarkdown(data.headline)} />
+      <ul class="hero-facts">
+        <li>{data.location}</li>
+        <li>{data.timezone}</li>
+        <li>{data.workMode}</li>
+        <li class:list={{ open: data.openToWork }}>{data.availability}</li>
+      </ul>
+      <ul class="hero-links">
+        <li><a href={`mailto:${data.email}`}>Email</a></li>
+        <li><a href={data.linkedin} rel="noopener noreferrer">LinkedIn</a></li>
+        <li><a href={data.github} rel="noopener noreferrer">GitHub</a></li>
+        <li><a href={data.booking} rel="noopener noreferrer">Book a call</a></li>
+      </ul>
+    </section>
+
+    <section class="figures grid" aria-labelledby="figures-title">
+      <h2 id="figures-title" class="figures-title">Key figures</h2>
+      {data.keyFigures.map((figure) => (
+        <div class="figure">
+          <p class="figure-value">{figure.value}{figure.unit && <span>{figure.unit}</span>}</p>
+          <p class="figure-label">{figure.label}</p>
+        </div>
+      ))}
+    </section>
+
+    <MarkdownResume sections={sections} />
+  </main>
+
+  <footer class="shell colophon">
+    <p>{data.title} · {data.location} · Updated {updated}</p>
+    <a href="/resume.pdf" download="Jordan-Simonovski-Resume.pdf">Download the PDF</a>
+  </footer>
 </ResumeLayout>

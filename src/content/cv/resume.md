@@ -6,12 +6,27 @@ email: jordan.simonovski@gmail.com
 website: https://jordansimonov.ski
 github: https://github.com/jordan-simonovski
 linkedin: https://www.linkedin.com/in/jsimonovski/
+booking: https://calendly.com/jordan-simonovski/30min
 openToWork: false
 availability: Not currently looking for new roles
 timezone: AEST (UTC+10)
 workMode: Remote-first (APAC-friendly, global collaboration)
 responseSla: Replies within 24 hours
 updatedAt: "2026-11-24"
+headline: "Senior Software Engineer on *ClickStack* at ClickHouse. Previously Staff Software Engineer on Observability at Atlassian."
+keyFigures:
+  - value: "100"
+    unit: "TB/day"
+    label: "ClickHouse wide-event ingestion at Atlassian"
+  - value: "180"
+    unit: "TB/day"
+    label: "Grafana Tempo tracing, built and run single-handed"
+  - value: "600"
+    unit: "TB/day"
+    label: "Splunk ingestion after modernising the platform"
+  - value: "30%+"
+    unit: ""
+    label: "Faster Tempo queries with minimal cost impact"
 experienceSpans:
   - id: "clickhouse-senior-engineer"
     service: "ClickHouse - ClickStack Team"
@@ -237,22 +252,9 @@ experienceSpans:
         detail: "Implemented deployment automation and CI workflows for faster releases."
 ---
 
-# Summary {#summary}
+# Profile {#summary}
 
 Senior software engineer on the ClickStack team at ClickHouse, building an open source observability product across the backend, infrastructure, and the ClickHouse Terraform provider, with a focus on scaling it to large enterprise workloads. Previously a staff engineer at Atlassian, owning global-scale observability infrastructure across Mimir, Tempo, and ClickHouse and operating largely independently across the full stack. A vocal advocate for moving beyond the three-pillar observability model toward wide events, with hands-on experience designing and driving that migration at scale, and building Grafana Scenes applications that measurably reduced MTTR. Technical reviewer for Observability Engineering, 2nd Edition and an active contributor to the broader SRE and observability community.
-
-# Core Skills {#skills}
-
-- Kubernetes platform engineering (EKS, Helm, GitOps, ArgoCD, custom operators)
-- AWS (10+ years, full platform scale up, compute, serverless)
-- Docker platforms (Kubernetes, EKS, GKE)
-- OpenTelemetry ecosystem (Weaver, Collector, SDK)
-- Observability (Prometheus/Mimir, Grafana, Tempo/ClickHouse)
-- Site Reliability Engineering (SLOs, War games, chaos testing/tooling)
-- IaC with Terraform/Crossplane and CI/CD with GitHub Actions/Bitbucket Pipelines
-- Golang, Typescript, and Rust development
-- Platform engineering i.e. building, validating and running internal products.
-- Avid speaker and mentor (especially junior engineers)
 
 # Experience {#experience}
 
@@ -311,8 +313,6 @@ Senior software engineer on the ClickStack team at ClickHouse, building an open 
 
 </details>
 
-</details>
-
 ## Cloud Engineering Lead - Lendi (2018-01 to 2020-05)
 
 - Led cloud-native migration direction and implementation, including container platform evolution on AWS.
@@ -365,6 +365,26 @@ Senior software engineer on the ClickStack team at ClickHouse, building an open 
 
 </details>
 
+# Skills {#skills}
+
+- Kubernetes platform engineering (EKS, Helm, GitOps, ArgoCD, custom operators)
+- AWS (10+ years, full platform scale up, compute, serverless)
+- Docker platforms (Kubernetes, EKS, GKE)
+- OpenTelemetry ecosystem (Weaver, Collector, SDK)
+- Observability (Prometheus/Mimir, Grafana, Tempo/ClickHouse)
+- Site Reliability Engineering (SLOs, War games, chaos testing/tooling)
+- IaC with Terraform/Crossplane and CI/CD with GitHub Actions/Bitbucket Pipelines
+- Golang, Typescript, and Rust development
+- Platform engineering i.e. building, validating and running internal products.
+- Avid speaker and mentor (especially junior engineers)
+
+# Leadership & Scope {#leadership-scope}
+
+- Took ClickStack's resources in the ClickHouse Terraform provider from alpha to stable, and brought shared engineering conventions (quality gates, coverage floors, mutation testing, supply-chain scans) to ClickStack's open source repos.
+- Drove the shift to new observability practices and tooling at Atlassian when implementing Grafana Scenes as a replacement for traditional dashboards, ClickHouse for modern observability based on the wide-event model, and AI observability kick-offs internally.
+- Owned observability architecture and operations for critical Atlassian workflows, including platforms running at `100TB/day`+ (ClickHouse) and `180TB/day` (Tempo).
+- Designed and shipped operator tooling used across teams, including internal Grafana Scenes workflows, AI-assisted query generation, and Atlassian's first service map by covered experience.
+- Drove reliability practice adoption across organisations by implementing SLO/error-budget patterns, burn-rate alerting, and incident/runbook automation.
 
 # Side Quests {#projects}
 
@@ -392,7 +412,8 @@ Senior software engineer on the ClickStack team at ClickHouse, building an open 
 - Built a local-first observability stack for faster debugging in day-to-day engineering loops.
 - Improved developer feedback loops by making traces, logs, and metrics available without production dependencies.
 
-## Extracurriculars
+# Community {#community}
+
 
 - Technical reviewer for [Observability Engineering, 2nd Edition](https://www.oreilly.com/library/view/observability-engineering-2nd/9781098179915/).
 - DevOpsDays Wollongong organiser, 2025.
@@ -401,31 +422,12 @@ Senior software engineer on the ClickStack team at ClickHouse, building an open 
 - DevOpsDays Sydney 2019 organiser.
 - Currently building out an [open source Grafana Scenes app](https://github.com/jordan-simonovski/heatmap-panel) on a ClickHouse data source to vastly improve developer experience when debugging applications
 
-
-# Leadership & Scope {#leadership-scope}
-
-- Took ClickStack's resources in the ClickHouse Terraform provider from alpha to stable, and brought shared engineering conventions (quality gates, coverage floors, mutation testing, supply-chain scans) to ClickStack's open source repos.
-- Drove the shift to new observability practices and tooling at Atlassian when implementing Grafana Scenes as a replacement for traditional dashboards, ClickHouse for modern observability based on the wide-event model, and AI observability kick-offs internally.
-- Owned observability architecture and operations for critical Atlassian workflows, including platforms running at `100TB/day`+ (ClickHouse) and `180TB/day` (Tempo).
-- Designed and shipped operator tooling used across teams, including internal Grafana Scenes workflows, AI-assisted query generation, and Atlassian's first service map by covered experience.
-- Drove reliability practice adoption across organisations by implementing SLO/error-budget patterns, burn-rate alerting, and incident/runbook automation.
-
-
-# Selected Impact {#selected-impact}
-
-- Scaled observability pipelines to `100TB/day`+ (ClickHouse) and `180TB/day` (Tempo) while preserving fast operator workflows.
-- Improved Tempo query performance by `30%+` with minimal cost impact.
-- Standardized Kubernetes delivery patterns with reusable Helm tooling and stronger deployment guardrails.
-
-
 # Contact {#contact}
 
 - Phone: Available upon request
 - Email: [jordan.simonovski@gmail.com](mailto:jordan.simonovski@gmail.com)
 - Website: [jordansimonov.ski](https://jordansimonov.ski)
 - GitHub: [github.com/jordan-simonovski](https://github.com/jordan-simonovski)
+- Book a call: [calendly.com/jordan-simonovski/30min](https://calendly.com/jordan-simonovski/30min)
 - LinkedIn: [linkedin.com/in/jsimonovski](https://www.linkedin.com/in/jsimonovski/)
-
-# References {#references}
-
-Available upon request.
+- References: Available upon request

@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "hero-eyebrow-chip",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-24T00:37:19.586Z",
+        "reason": "agent: unchosen decision-round sketch (spent mock, never shipped); the user picked the Swiss Annual Report card"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-24T00:47:00.316Z",
+        "reason": "agent: unchosen decision-round sketch (spent mock, never shipped); its fonts belong to the rejected direction"
+      }
+    ]
+  }
+}

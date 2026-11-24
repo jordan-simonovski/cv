@@ -33,7 +33,7 @@ marked.use({
   }
 });
 
-function renderMarkdown(markdown: string): string {
+export function renderMarkdown(markdown: string): string {
   return marked.parse(markdown) as string;
 }
 
