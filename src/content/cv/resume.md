@@ -1,23 +1,74 @@
 ---
 title: Jordan Simonovski
-role: Staff Software Engineer
+role: Senior Software Engineer
 location: Blue Mountains, Australia
 email: jordan.simonovski@gmail.com
 website: https://jordansimonov.ski
 github: https://github.com/jordan-simonovski
 linkedin: https://www.linkedin.com/in/jsimonovski/
-openToWork: true
-availability: Open to Staff/Principal platform and observability roles
+openToWork: false
+availability: Not currently looking for new roles
 timezone: AEST (UTC+10)
 workMode: Remote-first (APAC-friendly, global collaboration)
 responseSla: Replies within 24 hours
-updatedAt: "2026-03-15"
+updatedAt: "2026-11-24"
 experienceSpans:
+  - id: "clickhouse-senior-engineer"
+    service: "ClickHouse - ClickStack Team"
+    role: "Senior Software Engineer"
+    start: "2026-06"
+    end: "Present"
+    status: "ok"
+    summary: "Building ClickStack, ClickHouse's open source observability product (formerly HyperDX). Primarily OSS work across the backend, infrastructure, and the ClickHouse Terraform provider, with a focus on scaling ClickStack to large enterprise workloads."
+    pdfSummary: "Backend, infrastructure, and Terraform provider engineering for ClickStack, ClickHouse's open source observability product."
+    highlights:
+      - "Built the ClickStack service group in the ClickHouse Terraform provider, restructuring the provider into service groups and taking ClickStack resources from alpha to stable."
+      - "Added Terraform management of ClickStack on ClickHouse Cloud: dashboards, sources, standalone and tile alerts, multi-channel notifications (Slack API, PagerDuty, email), tags, and provider-level default tags, backed by Cloud e2e and upgrade tests."
+      - "Shipped Terraform import helpers and team-scoped import IDs in the ClickStack app so existing resources can move under IaC without hand edits."
+      - "Built out the ClickStack v2 external API (connections, team members, sources, saved searches, webhooks, dashboard validation) along with team-owned API keys and encryption for stored tokens."
+      - "Re-architected alert notifications behind a transport registry and dispatch seam, fanning out to multiple channels per alert with per-target delivery timing and richer webhook template variables."
+      - "Scaled backend paths for large enterprise workloads, such as fetching grouped-alert examples once instead of once per group and classifying failed ClickHouse proxy requests."
+      - "Uplifted OpenTelemetry instrumentation across all API surfaces and improved OpAMP telemetry, so ClickStack observes itself well."
+      - "Sped up and hardened CI: sharded and parallelised test suites, quality-gate and coverage floors, mutation testing, smoke tests for the all-in-one images, and Trivy/govulncheck scans with critical CVE fixes."
+      - "Brought my Helm coverage tool (helmcov) into the ClickHouse org and used it to gate the ClickStack Helm charts, alongside OCI publishing to GHCR, upgrade tests, and Artifact Hub metadata."
+      - "Added `hdx mcp install` to connect AI agents such as Claude Code and Codex to ClickStack without pasting API keys."
+    pdfHighlights:
+      - "Took the ClickStack Terraform provider resources from alpha to stable, including ClickHouse Cloud support, multi-channel alerts, and Cloud e2e coverage."
+      - "Built the ClickStack v2 external API and re-architected alert notifications for multi-channel fan-out."
+      - "Hardened CI, supply chain, and Helm chart delivery for an open source product used by large enterprise workloads."
+    stack:
+      - "TypeScript"
+      - "Node.js"
+      - "Golang"
+      - "Terraform"
+      - "ClickHouse"
+      - "OpenTelemetry"
+      - "Helm"
+      - "Kubernetes"
+    children:
+      - id: "clickstack-api-v2"
+        name: "ClickStack v2 API + enterprise features"
+        status: "ok"
+        startOffset: 0
+        endOffset: 45
+        detail: "Built the v2 external API, team-owned API keys, token encryption, and backend scaling fixes for large enterprise workloads."
+      - id: "clickstack-terraform-provider"
+        name: "ClickStack Terraform provider"
+        status: "ok"
+        startOffset: 15
+        endOffset: 100
+        detail: "Built the ClickStack service group in the ClickHouse Terraform provider and took its resources from alpha to stable on ClickHouse Cloud."
+      - id: "clickstack-alerting-ci"
+        name: "Alerting re-architecture + CI hardening"
+        status: "ok"
+        startOffset: 30
+        endOffset: 100
+        detail: "Moved alerts to multi-channel notifications and hardened CI, supply chain scanning, and Helm chart delivery."
   - id: "atlassian-staff-engineer"
     service: "Atlassian - Observability Team"
     role: "Staff Software Engineer"
     start: "2020-05"
-    end: "Present"
+    end: "2026-05"
     status: "ok"
     summary: "Owned and ran high-scale observability systems, ingesting hundreds of terabytes of telemetry per day. Advocated for and evangelised great observability using wide-events with a focus on MTTR reduction, great DX, high cardinality use-cases, and improving AI observability."
     pdfSummary: "Led observability platform strategy and delivery for traces, metrics, and logs at Atlassian scale."
@@ -188,14 +239,7 @@ experienceSpans:
 
 # Summary {#summary}
 
-Staff engineer owning global-scale observability infrastructure across Mimir, Tempo, and ClickHouse, operating largely independently across the full stack. A vocal advocate for moving beyond the three-pillar observability model toward wide events, with hands-on experience designing and driving that migration at scale. Builds Grafana Scenes applications that measurably reduce MTTR and unify visibility across heterogeneous technology stacks and data sources. Technical reviewer for Observability Engineering, 2nd Edition and an active contributor to the broader SRE and observability community.
-
-# Recruiter Snapshot
-
-- Availability: Open to Staff/Principal platform and observability roles
-- Timezone: AEST (UTC+10), overlapping US and EU collaboration windows
-- Work mode: Remote-first, open to distributed global teams
-- Response SLA: Typically within 24 hours
+Senior software engineer on the ClickStack team at ClickHouse, building an open source observability product across the backend, infrastructure, and the ClickHouse Terraform provider, with a focus on scaling it to large enterprise workloads. Previously a staff engineer at Atlassian, owning global-scale observability infrastructure across Mimir, Tempo, and ClickHouse and operating largely independently across the full stack. A vocal advocate for moving beyond the three-pillar observability model toward wide events, with hands-on experience designing and driving that migration at scale, and building Grafana Scenes applications that measurably reduced MTTR. Technical reviewer for Observability Engineering, 2nd Edition and an active contributor to the broader SRE and observability community.
 
 # Core Skills {#skills}
 
@@ -212,7 +256,33 @@ Staff engineer owning global-scale observability infrastructure across Mimir, Te
 
 # Experience {#experience}
 
-## Staff Software Engineer - Atlassian (2020-05 to Present)
+## Senior Software Engineer - ClickHouse (2026-06 to Present)
+
+- Senior engineer on the ClickStack team, building ClickHouse's open source observability product (formerly HyperDX) across the backend, infrastructure, and the ClickHouse Terraform provider.
+- Primarily OSS work focused on scaling ClickStack to large enterprise workloads and making it manageable as code.
+
+<details>
+  <summary>Expand full impact</summary>
+
+- Built the ClickStack service group in the [ClickHouse Terraform provider](https://github.com/ClickHouse/terraform-provider-clickhouse), restructuring the provider into service groups and taking ClickStack resources from alpha to stable.
+- Added Terraform support for ClickStack on ClickHouse Cloud: dashboards, sources, standalone and dashboard tile alerts, multi-channel notifications (Slack API, PagerDuty, email), tags and provider-level default tags, plus a source data source.
+- Backed the provider with Cloud e2e tests, upgrade tests against the latest registry release, govulncheck, and mutation testing.
+- Shipped Terraform import helpers and team-scoped import IDs in the ClickStack app so existing resources can move under IaC without hand edits.
+- Built out the ClickStack v2 external API (connections, team members, sources, saved searches, webhooks, dashboard validation), team-owned API keys, and encryption for stored tokens.
+- Re-architected alert notifications behind a transport registry and dispatch seam, fanning out to multiple channels per alert with per-target delivery timing.
+- Enriched webhook templates (incident.io, generic, group-by values as `{{var.<column>}}`) and made `{{sourceQuery}}` match the condition an alert actually evaluates.
+- Scaled backend paths for large enterprise workloads, such as fetching grouped-alert examples once instead of once per group and classifying failed ClickHouse proxy requests.
+- Uplifted OpenTelemetry instrumentation across all API surfaces and improved OpAMP telemetry.
+- Added a Prometheus `query_exemplars` endpoint and hardened the Prometheus proxy.
+- Sped up CI by splitting, parallelising, and sharding test suites, and added quality gates: ESLint ceilings, coverage floors, and Stryker mutation testing.
+- Hardened the supply chain with all-in-one image smoke tests, Trivy/govulncheck/npm audit scans, and critical CVE fixes in the app and collector images.
+- Moved my [helmcov](https://github.com/ClickHouse/helmcov) tool into the ClickHouse org and used it to gate the [ClickStack Helm charts](https://github.com/ClickHouse/ClickStack-helm-charts), alongside OCI publishing to GHCR, upgrade tests, and Artifact Hub metadata.
+- Added `hdx mcp install` to the CLI so AI agents such as Claude Code and Codex connect to ClickStack without pasting API keys.
+- Built AI-generated release notes into the release PR and surfaced them in an in-app "What's new" viewer.
+
+</details>
+
+## Staff Software Engineer - Atlassian (2020-05 to 2026-05)
 
 - Drove platform-level observability strategy and execution across traces, metrics, and logs at very high ingestion scale.
 - Improved query performance and incident response outcomes through better UX, faster diagnostics, and stronger telemetry defaults.
@@ -306,7 +376,7 @@ Staff engineer owning global-scale observability infrastructure across Mimir, Te
 
 ## Helm Coverage Tooling
 
-- [HelmCov](https://github.com/jordan-simonovski/helmcov) is a dynamic coverage checker which aims to surface coverage issues in helm charts. This is useful for charts which have a lot of branched templating logic. Testing all paths is ideal.
+- [HelmCov](https://github.com/ClickHouse/helmcov) is a dynamic coverage checker which aims to surface coverage issues in helm charts. This is useful for charts which have a lot of branched templating logic. Testing all paths is ideal.
 
 
 ## Helm Semantic Versioning
@@ -334,7 +404,8 @@ Staff engineer owning global-scale observability infrastructure across Mimir, Te
 
 # Leadership & Scope {#leadership-scope}
 
-- Drove the shift to new observability practices and tooling when implementing Grafana Scenes as a replacement for traditional dashboards, ClickHouse for modern observability based on the wide-event model, and AI observability kick-offs internally.
+- Took ClickStack's resources in the ClickHouse Terraform provider from alpha to stable, and brought shared engineering conventions (quality gates, coverage floors, mutation testing, supply-chain scans) to ClickStack's open source repos.
+- Drove the shift to new observability practices and tooling at Atlassian when implementing Grafana Scenes as a replacement for traditional dashboards, ClickHouse for modern observability based on the wide-event model, and AI observability kick-offs internally.
 - Owned observability architecture and operations for critical Atlassian workflows, including platforms running at `100TB/day`+ (ClickHouse) and `180TB/day` (Tempo).
 - Designed and shipped operator tooling used across teams, including internal Grafana Scenes workflows, AI-assisted query generation, and Atlassian's first service map by covered experience.
 - Drove reliability practice adoption across organisations by implementing SLO/error-budget patterns, burn-rate alerting, and incident/runbook automation.
